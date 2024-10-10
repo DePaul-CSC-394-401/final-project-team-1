@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<body>
+    <div class="header-container">
+        <div class="nav-links">
+            <a href='add_listing'> Add a listing | </a> 
+            <a href='profile'> Profile | </a>
+            <a href='logout'> Logout </a>
+        </div>
+    </div>
+
+    <div class="sidebar-container">
+        <div class="sidebar">
+            <input type="text" placeholder="Search...">
+        </div>
+
+        <div class="listing-grid">
+            <h1>Listings will go here</h1>
+            <!-- Listing cards will be displayed here -->
+        </div>
+    </div>
+</body>
+{% endblock %}
