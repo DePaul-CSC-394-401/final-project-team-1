@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<div class="auth-container">
+    <h2>Login</h2>
+    <form method="POST" action="{% url 'userlogin' %}">
+        {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Login</button>
+    </form>
+    <!-- Button to go to Sign Up page -->
+    <a>Don't have an account?</a>
+    <a href="{% url 'signup' %}">
+        <button type="button">Sign Up</button>
+    </a>
+</div>
+{% endblock %}

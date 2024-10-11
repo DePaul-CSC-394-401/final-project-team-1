@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<div class="auth-container">
+    <h2>Sign Up</h2>
+    <form method="POST" action="{% url 'signup' %}">
+        {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="confirm-password">Confirm Password:</label>
+        <input type="password" id="confirm-password" name="confirm-password" required>
+
+        <label for="year">Year:</label>
+        <select id="year" name="year" required>
+            <option value="freshman">Freshman</option>
+            <option value="sophomore">Sophomore</option>
+            <option value="junior">Junior</option>
+            <option value="senior">Senior</option>
+            <option value="graduate">Graduate</option>
+        </select>
+
+        <label for="campus">Campus:</label>
+        <select id="campus" name="campus" required>
+            <option value="lincoln_park">Lincoln Park</option>
+            <option value="loop">Loop</option>
+        </select>
+
+        <label for="graduating">Graduating This Year?</label>
+        <input type="checkbox" id="graduating" name="graduating">
+
+        <button type="submit">Sign Up</button>
+    </form>
+    <!-- Button to go to Login page -->
+    <a href="{% url 'userlogin' %}">
+        <button type="button">Back to Login</button>
+    </a>
+</div>
+{% endblock %}
