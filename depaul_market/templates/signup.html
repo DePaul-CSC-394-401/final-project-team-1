@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<div class="auth-container">
+    <h2>Sign Up</h2>
+    <form method="POST" action="{% url 'signup' %}">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+        </div>
+
+        <!-- Your additional fields -->
+        <div class="form-group">
+            <label for="year">Year</label>
+            <select id="year" name="year" required>
+                <option value="freshman">Freshman</option>
+                <option value="sophomore">Sophomore</option>
+                <option value="junior">Junior</option>
+                <option value="senior">Senior</option>
+                <option value="graduate">Graduate</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="campus">Campus</label>
+            <select id="campus" name="campus" required>
+                <option value="lincoln_park">Lincoln Park</option>
+                <option value="loop">Loop</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="graduating">Graduating This Year?</label>
+            <input type="checkbox" id="graduating" name="graduating">
+        </div>
+
+        <button type="submit" class="auth-btn">Sign Up</button>
+    </form>
+
+    <p>Already have an account? 
+        <a href="{% url 'userlogin' %}" class="switch-link">Log In</a>
+    </p>
+</div>
+{% endblock %}
