@@ -22,19 +22,22 @@ def signup(request):
         confirm_password = request.POST['confirm-password']
         year = request.POST['year']
         campus = request.POST['campus']
-        graduating = request.POST.get('graduating', False)
+        graduating = request.POST.get('graduating', False)  == 'on'
 
         if password == confirm_password:
             try:
                 user = User.objects.create_user(username=username, email=email, password=password)
                 profile = Profile(user=user, year=year, campus=campus, graduating=graduating)
                 profile.save()
-                login(request, user)
-                return redirect('index')
+                messages.success(request, 'Account created successfully! Please log in.')
+                return redirect('userlogin')
             except IntegrityError:
-                messages.error(request, "Username already taken.")
+                # Show the error message on the same signup page
+                messages.error(request, "Username already exists. Please try a different username.")
+                return render(request, 'signup.html')
         else:
             messages.error(request, "Passwords do not match.")
+            return render(request, 'signup.html')
     return render(request, 'signup.html')
 
 # Login view

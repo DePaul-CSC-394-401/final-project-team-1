@@ -119,3 +119,25 @@ p {
     margin-top: 10px;
 }
 */
+
+.messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.messages li {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.messages li.success {
+    background-color: #4CAF50; /* Green for success messages */
+}
+
+.messages li.error {
+    background-color: #f44336; /* Red for error messages */
+}
+
