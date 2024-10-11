@@ -22,7 +22,7 @@ def signup(request):
         confirm_password = request.POST['confirm-password']
         year = request.POST['year']
         campus = request.POST['campus']
-        graduating = request.POST.get('graduating', False)
+        graduating = request.POST.get('graduating', False)  == 'on'
 
         if password == confirm_password:
             try:
@@ -30,7 +30,7 @@ def signup(request):
                 profile = Profile(user=user, year=year, campus=campus, graduating=graduating)
                 profile.save()
                 login(request, user)
-                return redirect('index')
+                return redirect('login')
             except IntegrityError:
                 messages.error(request, "Username already taken.")
         else:
