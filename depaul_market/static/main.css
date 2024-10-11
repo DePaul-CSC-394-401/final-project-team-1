@@ -1,0 +1,121 @@
+/* Header Container */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #2980b9; /* Border for the header section */
+}
+
+.sidebar-container {
+    display: flex;
+}
+
+.sidebar {
+    width: 25%;
+    padding: 10px;
+    border-right: 1px solid #ccc;
+}
+
+.listing-grid {
+    width: 75%;
+    padding: 10px;
+}
+
+.header-container {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.nav-links a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #007bff;
+}   
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+
+
+.auth-container {
+    background-color: black;
+    color: white;
+    width: 400px;
+    padding: 30px;
+    border-radius: 15px;
+    margin: 100px auto;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added shadow for modern look */
+}
+
+/* disabled css for login and signup, will turn it on after POS
+.auth-container h2 {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="text"],
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #333; 
+    color: white;
+}
+
+.form-group input[type="checkbox"] {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: purple;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.auth-btn:hover {
+    background-color: #5e33a5;
+}
+
+.switch-link {
+    color: #ccc;
+    text-decoration: none;
+}
+
+.switch-link:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+p {
+    margin-top: 10px;
+}
+*/
