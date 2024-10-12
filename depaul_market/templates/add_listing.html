@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<body>
+    <h1>Add Item</h1>
+    <div class="nav-links">
+        <a href="{% url 'explore' %}"> Back to Explore Page</a>
+    </div>
+
+    <form action="" method="post">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="image">Image:</label>
+            {{ ProductsForm.image }}
+        </div>
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            {{ ProductsForm.name }}
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price:</label>
+            {{ ProductsForm.price }}
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            {{ ProductsForm.description }}
+        </div>
+
+        <div class="form-group">
+            <input class="button" type="submit" value="Add in Item">
+        </div>
+    </form>
+
+</body>
+{% endblock %}

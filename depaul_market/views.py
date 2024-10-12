@@ -4,6 +4,10 @@ from django.contrib import messages
 from .models import Profile
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
+from .models import Products
+from .forms import ProductsForm
+from django.db import models
+from datetime import datetime
 
 # Index view
 def index(request):
@@ -11,7 +15,9 @@ def index(request):
 
 # Listings view
 def listings(request):
-    return render(request, 'explore.html')
+    products = Products.objects.all()
+    context = {'products': products}
+    return render(request, 'explore.html', context)
 
 # Signup view
 def signup(request):
@@ -52,3 +58,17 @@ def userlogin(request):
         else:
             messages.error(request, "Invalid login credentials.")
     return render(request, 'login.html')
+
+def addProduct(request):
+    form = ProductsForm()
+    if request.method == 'POST':
+        form = ProductsForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False) 
+            if not product.made_available:
+                product.made_available = datetime.now
+            product.user = request.user 
+            product.save()  
+        return redirect('/explore')
+    context = {'ProductsForm': form}
+    return render(request, 'add_listing.html', context)
