@@ -62,7 +62,7 @@ def userlogin(request):
 def addProduct(request):
     form = ProductsForm()
     if request.method == 'POST':
-        form = ProductsForm(request.POST)
+        form = ProductsForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False) 
             if not product.made_available:
