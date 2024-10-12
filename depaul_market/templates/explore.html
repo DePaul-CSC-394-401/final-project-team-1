@@ -4,7 +4,7 @@
 <body>
     <div class="header-container">
         <div class="nav-links">
-            <a href='add_listing'> Add a listing | </a> 
+            <a href="{% url 'add_listing' %}"> Add a listing | </a> 
             <a href='profile'> Profile | </a>
             <a href='logout'> Logout </a>
         </div>
@@ -15,9 +15,20 @@
             <input type="text" placeholder="Search...">
         </div>
 
+        <h1>Listings will go here</h1>
         <div class="listing-grid">
-            <h1>Listings will go here</h1>
+            {% for product in products %}
             <!-- Listing cards will be displayed here -->
+            <div class="listing-card">
+                <p><img src="{{ product.image.url }}" width="200" height="200"/></p>
+                <p>Product Name: {{ product.name }}</p>
+                <p>Info: {{ product.description }}</p>
+                <p>Price: ${{ product.price }}</p>
+                <p>Made Available:{{ product.made_available}}</p>
+            </div>
+            {% empty %}
+            <h3>Currently No Products</h3>
+            {% endfor %}
         </div>
     </div>
 </body>
