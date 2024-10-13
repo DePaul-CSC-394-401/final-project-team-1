@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Profile
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
-from .models import Products
+from .models import Products, UserCart
 from .forms import ProductsForm
 from django.db import models
 from datetime import datetime
@@ -72,3 +72,32 @@ def addProduct(request):
         return redirect('/explore')
     context = {'ProductsForm': form}
     return render(request, 'add_listing.html', context)
+
+def add_to_cart(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        product = get_object_or_404(Products, id=product_id)
+        cart_items = UserCart.objects.filter(user=request.user, products=product)
+        if not cart_items.exists():
+            UserCart.objects.create(
+                user = request.user,
+                products = product,
+            )
+        return redirect('explore')
+    return render(request, 'cart')
+
+def view_cart(request):
+    cart_list = UserCart.objects.filter(user=request.user)
+    total = 0
+    for item in cart_list:
+        total += item.products.price
+    context = {'cart_list': cart_list, 'total': total}
+    return render(request, 'cart.html', context)
+
+def payment(request):
+    if request.method == 'POST':
+        cart_items = UserCart.objects.filter(user=request.user)
+        if cart_items.exists():
+            cart_items.delete()
+        messages.success(request, 'Thank you for your purchase')
+    return redirect('cart')

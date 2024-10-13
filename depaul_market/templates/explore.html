@@ -7,6 +7,7 @@
             <a href="{% url 'add_listing' %}"> Add a listing | </a> 
             <a href='profile'> Profile | </a>
             <a href='logout'> Logout </a>
+            <a href="{% url 'cart' %}">Cart</a>
         </div>
     </div>
 
@@ -25,6 +26,11 @@
                 <p>Info: {{ product.description }}</p>
                 <p>Price: ${{ product.price }}</p>
                 <p>Made Available:{{ product.made_available}}</p>
+                <form method="POST" action="{% url 'add_to_cart' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <button type="submit">Add to Cart</button>
+                </form>
             </div>
             {% empty %}
             <h3>Currently No Products</h3>
