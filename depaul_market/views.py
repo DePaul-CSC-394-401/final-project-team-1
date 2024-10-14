@@ -15,7 +15,12 @@ def index(request):
 
 # Listings view
 def listings(request):
+    query = request.GET.get('q')
+
     products = Products.objects.all()
+
+    if query:
+        products = products.filter(name__icontains=query)
     context = {'products': products}
     return render(request, 'explore.html', context)
 
