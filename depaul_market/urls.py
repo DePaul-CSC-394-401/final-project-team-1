@@ -1,3 +1,4 @@
+
 from django.urls import path
 from . import views
 from django.contrib import admin
@@ -14,4 +15,8 @@ urlpatterns = [
     path('pay', views.payment, name='payment'),
     path('profile/', views.profile_settings, name='profile_settings'),
     path('logout/', LogoutView.as_view(next_page='userlogin'), name='logout'),
+    path('listing/<int:listing_id>/edit/', views.edit_listing, name='edit_listing'),  # Updated for clarity
+    path('delete_listing/<int:id>/', views.delete_listing, name='delete_listing'),
+    path('user/<int:user_id>/listings/', views.user_listings, name='user_listings'),
+
 ]

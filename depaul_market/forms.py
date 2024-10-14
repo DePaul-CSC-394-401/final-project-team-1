@@ -21,4 +21,9 @@ class EmailUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email']
-        
+
+
+class EditListingForm(forms.ModelForm):
+    class Meta:
+        model = Products  # Use Products instead of Listing
+        fields = ['image', 'name', 'price', 'description']
