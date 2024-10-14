@@ -16,6 +16,12 @@ class Products(models.Model):
     
     class Meta:
         ordering = ['made_available']
+        
+
+class UserCart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    products = models.ForeignKey(Products, on_delete=models.CASCADE)
+    
 
 # Profile model to store additional student info
 class Profile(models.Model):

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% load static %}
+<h1> <a href="{% url 'explore' %}">Home</a> <h1>
+<h2>Cart</h2>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if cart_list %}
+<ul>
+    {% for items in cart_list %}
+    <div class="checkout">
+        <p><img src="{{ items.products.image.url }}" width="200" height="200"/></p>
+        <p>Product Name: {{ items.products.name }}</p>
+        <p>Info: {{ items.products.description }}</p>
+        <p>Price: ${{ items.products.price }}</p>
+            {% csrf_token %}
+            <button type='submit'>Remove</button>
+        </form>
+    </div>
+{% endfor %}
+</ul>
+    <div class="total_cost">
+        <h3>Total: ${{ total }}</h3>
+    </div>
+    
+</div>
+<div class="Pay">
+    <form method="POST" action="{% url 'payment' %}">
+    {% csrf_token %}
+    <button type='submit'>Pay</button>
+</div>
+{% else %}
+<h3>Empty Cart</h3>
+{% endif %}
+
+<script src="{% static 'js/cart.js' %}"></script>
+
+{% endblock %}
