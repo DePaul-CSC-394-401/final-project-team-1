@@ -9,6 +9,13 @@ from .forms import ProductsForm
 from django.db import models
 from datetime import datetime
 
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .forms import EmailUpdateForm  # Assuming you have a custom form for email
+
 # Index view
 def index(request):
     return render(request, 'index.html')
@@ -101,3 +108,37 @@ def payment(request):
             cart_items.delete()
         messages.success(request, 'Thank you for your purchase')
     return redirect('cart')
+
+
+def profile_settings(request):
+    # Initialize the forms before handling POST data
+    email_form = EmailUpdateForm(instance=request.user)
+    password_form = PasswordChangeForm(user=request.user)
+
+    if request.method == 'POST':
+        # Handle Email Update
+        if 'update_email' in request.POST:
+            email_form = EmailUpdateForm(request.POST, instance=request.user)
+            if email_form.is_valid():
+                email_form.save()
+                messages.success(request, 'Your email was successfully updated!')
+                return redirect('explore')
+            else:
+                messages.error(request, 'There was an error updating your email.')
+
+        # Handle Password Change
+        if 'change_password' in request.POST:
+            password_form = PasswordChangeForm(user=request.user, data=request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)  # Keep the user logged in
+                messages.success(request, 'Your password was successfully updated!')
+                return redirect('explore')
+            else:
+                messages.error(request, 'There was an error changing your password.')
+
+    # Always render the forms, whether GET or POST
+    return render(request, 'profile.html', {
+        'email_form': email_form,
+        'password_form': password_form
+    })
