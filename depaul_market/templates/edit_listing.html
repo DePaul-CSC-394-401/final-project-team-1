@@ -1,0 +1,20 @@
+<h2>Edit Listing</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    {% if form.errors %}
+        <div style="color: red;">
+            <ul>
+                {% for field in form %}
+                    {% if field.errors %}
+                        <li>{{ field.label }}: {{ field.errors|striptags }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    
+    <button type="submit">Save Changes</button>
+</form>
