@@ -1,19 +1,23 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h2>Listings by {{ user.username }}</h2>
+{% block head %}
+<body>
+    <h1>Listings by {{ user.username }}</h1>
 
-{% if listings %}
-    <ul>
-    {% for listing in listings %}
-        <li>
-            <strong>{{ listing.name }}</strong> - ${{ listing.price }}
-            <p>{{ listing.description }}</p>
-            <img src="{{ listing.image.url }}" width="200" height="200" alt="Listing Image">
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>{{ user.username }} has not posted any listings yet.</p>
-{% endif %}
+    {% if listings %}
+        <ul>
+        {% for listing in listings %}
+            <li>
+                <p><strong>{{ listing.name }}</strong> - ${{ listing.price }}</p>
+                <p>{{ listing.description }}</p>
+                <img src="{{ listing.image.url }}" width="200" height="200" alt="Listing Image">
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>{{ user.username }} has not posted any listings yet.</p>
+    {% endif %}
+
+    <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore</a>
+</body>
 {% endblock %}
