@@ -6,7 +6,10 @@
         <div class="nav-links">
             <a href="{% url 'add_listing' %}"> Add a listing | </a> 
             <a href="{% url 'profile_settings' %}">Profile |</a>
+<<<<<<< HEAD
             <a href="{% url 'logout' %}"> Logout </a>
+=======
+>>>>>>> 48d404b (User Listings)
             <a href="{% url 'cart' %}">Cart</a>
         </div>
     </div>
@@ -28,8 +31,13 @@
                 <p>Product Name: {{ product.name }}</p>
                 <p>Info: {{ product.description }}</p>
                 <p>Price: ${{ product.price }}</p>
-                <p>Made Available:{{ product.made_available}}</p>
-                <a href="{% url 'profile_settings' %}" > {{product.user}} </a>
+                <p>Made Available: {{ product.made_available }}</p>
+                
+                <!-- Link to the user's profile with all their listings -->
+                <a href="{% url 'user_listings' product.user.id %}" > {{ product.user.username }} </a>
+                
+                
+                <!-- Add to Cart Button -->
                 <form method="POST" action="{% url 'add_to_cart' %}">
                     {% csrf_token %}
                     <input type="hidden" name="product_id" value="{{ product.id }}">

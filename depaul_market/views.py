@@ -11,9 +11,17 @@ from datetime import datetime
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.shortcuts import render, redirect
-from .forms import EmailUpdateForm  # Assuming you have a custom form for email
+from .forms import EmailUpdateForm  
+from django.shortcuts import get_object_or_404
+from .models import Products
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Products
+from .forms import ProductsForm
+
 
 # Index view
 def index(request):
@@ -114,7 +122,8 @@ def payment(request):
     return redirect('cart')
 
 def profile_settings(request):
-    # Initialize the forms before handling POST data
+    user_listings = Products.objects.filter(user=request.user)
+
     email_form = EmailUpdateForm(instance=request.user)
     password_form = PasswordChangeForm(user=request.user)
 
@@ -143,5 +152,26 @@ def profile_settings(request):
     # Always render the forms, whether GET or POST
     return render(request, 'profile.html', {
         'email_form': email_form,
-        'password_form': password_form
+        'password_form': password_form,
+        'listings': user_listings,
     })
+
+def delete_listing(request, id):
+    listing = get_object_or_404(Products, id=id, user=request.user)
+    if request.method == 'POST':
+        listing.delete()
+        return redirect('profile_settings')
+
+def user_listings(request, user_id):
+    print(f"Fetching listings for user ID: {user_id}")
+    user = get_object_or_404(User, id=user_id)
+    listings = Products.objects.filter(user=user)
+    print(f"Found {listings.count()} listings for user {user.username}")
+
+    return render(request, 'user_listings.html', {
+        'user': user,
+        'listings': listings,
+    })
+
+
+

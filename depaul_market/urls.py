@@ -13,5 +13,13 @@ urlpatterns = [
     path('add', views.add_to_cart, name='add_to_cart'),
     path('pay', views.payment, name='payment'),
     path('profile/', views.profile_settings, name='profile_settings'),
+<<<<<<< HEAD
     path('logout/', LogoutView.as_view(next_page='userlogin'), name='logout'),
+=======
+    
+
+    path('delete_listing/<int:id>/', views.delete_listing, name='delete_listing'),
+    path('user/<int:user_id>/', views.user_listings, name='user_listings'),
+
+>>>>>>> 48d404b (User Listings)
 ]
