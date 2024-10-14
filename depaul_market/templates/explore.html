@@ -16,6 +16,33 @@
             <form method="GET" action="">
                 <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
                 <button type="submit">Search</button>
+
+                                <!-- Location Filter -->
+                <div class="filter-section">
+                    <label for="location">Location:</label>
+                    <select id="location" name="location">
+                        <option value="lincoln_park">Lincoln Park</option>
+                        <option value="the_loop">The Loop</option>
+                    </select>
+                </div>
+                
+                <!-- Price Filter -->
+                <div class="filter-section">
+                    <label for="price">Sort by Price:</label>
+                    <select id="price" name="price">
+                        <option value="max">Highest First</option>
+                        <option value="min">Lowest First</option>
+                    </select>
+                </div>
+                
+                <!-- Date Listed Filter -->
+                <div class="filter-section">
+                    <label for="date_listed">Date Listed:</label>
+                    <select id="date_listed" name="date_listed">
+                        <option value="newest">Newest</option>
+                        <option value="oldest">Oldest</option>
+                    </select>
+                </div>
             </form>
         </div>
 
