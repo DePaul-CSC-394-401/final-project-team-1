@@ -20,8 +20,6 @@
         <p>Product Name: {{ items.products.name }}</p>
         <p>Info: {{ items.products.description }}</p>
         <p>Price: ${{ items.products.price }}</p>
-            {% csrf_token %}
-            <button type='submit'>Remove</button>
         </form>
     </div>
 {% endfor %}
