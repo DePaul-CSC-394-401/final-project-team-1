@@ -33,12 +33,35 @@ def index(request):
 # Listings view
 def listings(request):
     query = request.GET.get('q')
+    location = request.GET.get('location')
+    price_sort = request.GET.get('price')
+    date_sort = request.GET.get('date_listed')
 
     products = Products.objects.all()
+    print(price_sort)
+    print(location)
 
     if query:
         products = products.filter(name__icontains=query)
+    if location:
+        # Debugging: Print the initial queryset
+        print(f"Initial Products: {products}")
+        products = products.filter(user__profile__campus=location)
+        # Debugging: Print the filtered queryset
+        print(f"Filtered Products by Location: {products}")
+    if price_sort == 'min':
+        products = products.order_by('price')
+    elif price_sort == 'max':
+        products = products.order_by('-price')
+
+        # Sort by date listed if specified
+    if date_sort == 'newest':
+        products = products.order_by('-made_available')
+    elif date_sort == 'oldest':
+        products = products.order_by('made_available')
+
     context = {'products': products}
+
     return render(request, 'explore.html', context)
 
 # Signup view

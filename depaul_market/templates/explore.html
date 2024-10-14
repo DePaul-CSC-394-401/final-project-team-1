@@ -13,9 +13,42 @@
 
     <div class="sidebar-container">
         <div class="sidebar">
-            <form method="GET" action="">
+            <form method="GET" action="{% url 'listings' %}">
                 <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
                 <button type="submit">Search</button>
+
+                <!-- Location Filter -->
+                <div class="filter-section">
+                    <label for="location">Location:</label>
+                    <div class="dropdown">
+                        <input type="radio" id="lincoln_park" name="location" value="lincoln_park">
+                        <label for="lincoln_park">Lincoln Park</label><br>
+                        <input type="radio" id="the_loop" name="location" value="loop">
+                        <label for="the_loop">The Loop</label>
+                    </div>
+                </div>
+                
+                <!-- Price Filter -->
+                <div class="filter-section">
+                    <label for="price">Sort by Price:</label>
+                    <div class="dropdown">
+                        <input type="radio" id="min" name="price" value="min">
+                        <label for="min">Lowest first</label><br>
+                        <input type="radio" id="max" name="price" value="max">
+                        <label for="max">Highest first</label>
+                    </div>
+                </div>
+                
+                <!-- Date Listed Filter -->
+                <div class="filter-section">
+                    <label for="date_listed">Date Listed:</label>
+                    <div class="dropdown">
+                        <input type="radio" id="newest" name="date_listed" value="newest">
+                        <label for="newest">Newest</label><br>
+                        <input type="radio" id="oldest" name="date_listed" value="oldest">
+                        <label for="oldest">Oldest</label>
+                    </div>
+                </div>
             </form>
         </div>
 
