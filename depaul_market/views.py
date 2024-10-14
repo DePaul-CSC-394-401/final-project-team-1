@@ -119,8 +119,12 @@ def view_cart(request):
 def payment(request):
     if request.method == 'POST':
         cart_items = UserCart.objects.filter(user=request.user)
+
         if cart_items.exists():
+            for items in cart_items:
+                items.products.delete()
             cart_items.delete()
+
         messages.success(request, 'Thank you for your purchase')
     return redirect('cart')
 
