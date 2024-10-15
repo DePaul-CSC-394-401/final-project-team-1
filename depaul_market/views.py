@@ -175,7 +175,7 @@ def profile_settings(request):
                 messages.success(request, 'Your password was successfully updated!')
                 return redirect('explore')
             else:
-                messages.error(request, 'There was an error changing your password.')
+                messages.error(request, 'There was an error changing your password. Please try again')
 
     # Always render the forms, whether GET or POST
     return render(request, 'profile.html', {
