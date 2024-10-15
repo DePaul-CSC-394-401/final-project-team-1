@@ -1,5 +1,7 @@
 <h2>Edit Listing</h2>
 
+<a href="{% url 'profile_settings' %}">Back to profile</a>
+
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
