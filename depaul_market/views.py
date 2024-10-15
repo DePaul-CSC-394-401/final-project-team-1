@@ -110,8 +110,6 @@ def addProduct(request):
         form = ProductsForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False) 
-            if not product.made_available:
-                product.made_available = datetime.now
             product.user = request.user 
             product.save()  
         return redirect('/explore')
