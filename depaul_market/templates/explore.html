@@ -62,6 +62,7 @@
                 <p>Info: {{ product.description }}</p>
                 <p>Price: ${{ product.price }}</p>
                 <p>Made Available: {{ product.made_available }}</p>
+                <p>Location: {{product.user.profile.get_campus_display}}</p>
                 
                 <!-- Link to the user's profile with all their listings -->
                 <a href="{% url 'user_listings' product.user.id %}" > {{ product.user.username }} </a>
