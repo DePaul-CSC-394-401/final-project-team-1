@@ -189,18 +189,8 @@ def delete_listing(request, id):
     if request.method == 'POST':
         listing.delete()
         return redirect('profile_settings')
-'''
-def user_listings(request, user_id):
-    print(f"Fetching listings for user ID: {user_id}")
-    user = get_object_or_404(User, id=user_id)
-    listings = Products.objects.filter(user=user)
-    print(f"Found {listings.count()} listings for user {user.username}")
 
-    return render(request, 'user_listings.html', {
-        'user': user,
-        'listings': listings,
-    })
-'''
+
 def user_listings(request, user_id):
     user = get_object_or_404(User, id=user_id)
     listings = Products.objects.filter(user=user)
@@ -217,4 +207,6 @@ def edit_listing(request, listing_id):
     else:
         form = ProductsForm(instance=listing)
     return render(request, 'edit_listing.html', {'form': form})
+
+
 
