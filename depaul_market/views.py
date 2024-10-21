@@ -25,6 +25,9 @@ from .models import Products  # Remove Listing import and replace with Products
 
 from .forms import EditListingForm
 
+from .forms import EmailUpdateForm, ProfileUpdateForm  # Add ProfileUpdateForm
+
+
 
 # Index view
 def index(request):
@@ -156,7 +159,7 @@ def profile_settings(request):
         'listings': user_listings,
     })
 
-
+'''
 @login_required
 def profile_management(request):
     email_form = EmailUpdateForm(instance=request.user)
@@ -188,7 +191,47 @@ def profile_management(request):
         'email_form': email_form,
         'password_form': password_form,
     })
+'''
 
+def profile_management(request):
+    # Existing email and password forms
+    email_form = EmailUpdateForm(instance=request.user)
+    password_form = PasswordChangeForm(user=request.user)
+
+    # New profile form for introduction
+    profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    if request.method == 'POST':
+        # Handle Email Update
+        if 'update_email' in request.POST:
+            email_form = EmailUpdateForm(request.POST, instance=request.user)
+            if email_form.is_valid():
+                email_form.save()
+                messages.success(request, 'Your email was successfully updated!')
+                return redirect('profile_management')
+
+        # Handle Password Change
+        if 'change_password' in request.POST:
+            password_form = PasswordChangeForm(user=request.user, data=request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Your password was successfully updated!')
+                return redirect('profile_management')
+
+        # Handle Profile (Introduction) Update
+        if 'update_profile' in request.POST:
+            profile_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, 'Your profile introduction was successfully updated!')
+                return redirect('profile_management')
+
+    return render(request, 'profile_management.html', {
+        'email_form': email_form,
+        'password_form': password_form,
+        'profile_form': profile_form,  # Pass the new profile form
+    })
 
 
 

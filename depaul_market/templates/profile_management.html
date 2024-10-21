@@ -2,25 +2,29 @@
 
 {% block head %}
 <body>
-    <a href="{% url 'profile_settings' %}">Back to Profile</a>
+    <a href="{% url 'profile_settings' %}" class="btn btn-primary">Back to Profile</a>
 
-    
+    <h1>Manage Profile</h1>
 
-    <h1>Profile Management</h1>
-
-    <!-- Form for email update -->
-    <form method="POST" action="{% url 'profile_management' %}">
+    <!-- Email Update Form -->
+    <form method="POST">
         {% csrf_token %}
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="{{ user.email }}">
-        <button type="submit" name="update_email">Update Email</button> 
+        {{ email_form.as_p }}
+        <button type="submit" name="update_email">Update Email</button>
     </form>
 
-    <!-- Form for password change -->
-    <form method="POST" action="{% url 'profile_management' %}">
+    <!-- Password Change Form -->
+    <form method="POST">
         {% csrf_token %}
         {{ password_form.as_p }}
-        <button type="submit" name="change_password">Change Password</button> 
+        <button type="submit" name="change_password">Change Password</button>
+    </form>
+
+    <!-- Introduction Update Form -->
+    <form method="POST">
+        {% csrf_token %}
+        {{ profile_form.as_p }}  <!-- Display the form for updating the introduction -->
+        <button type="submit" name="update_profile">Update Profile</button>
     </form>
 
     {% if messages %}
