@@ -3,31 +3,11 @@
 {% block head %}
 <body>
     <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore</a>
+    <a href="{% url 'profile_management' %}" class="btn btn-primary">Manage Email and Password</a>
 
-    <h1>Profile Management</h1>
 
-    <!-- Form for email update -->
-    <form method="POST" action="{% url 'profile_settings' %}">
-        {% csrf_token %}
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="{{ user.email }}">
-        <button type="submit" name="update_email">Update Email</button> 
-    </form>
 
-    <!-- Form for password change -->
-    <form method="POST" action="{% url 'profile_settings' %}">
-        {% csrf_token %}
-        {{ password_form.as_p }}
-        <button type="submit" name="change_password">Change Password</button> 
-    </form>
-
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <h1>Profile </h1>
 
     <h2>Your Listings</h2>
     {% if listings %}

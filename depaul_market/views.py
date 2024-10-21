@@ -149,9 +149,16 @@ def payment(request):
         messages.success(request, 'Thank you for your purchase')
     return redirect('cart')
 
+@login_required
 def profile_settings(request):
     user_listings = Products.objects.filter(user=request.user)
+    return render(request, 'profile.html', {
+        'listings': user_listings,
+    })
 
+
+@login_required
+def profile_management(request):
     email_form = EmailUpdateForm(instance=request.user)
     password_form = PasswordChangeForm(user=request.user)
 
@@ -162,7 +169,7 @@ def profile_settings(request):
             if email_form.is_valid():
                 email_form.save()
                 messages.success(request, 'Your email was successfully updated!')
-                return redirect('explore')
+                return redirect('profile_management')
             else:
                 messages.error(request, 'There was an error updating your email.')
 
@@ -173,16 +180,18 @@ def profile_settings(request):
                 user = password_form.save()
                 update_session_auth_hash(request, user)  # Keep the user logged in
                 messages.success(request, 'Your password was successfully updated!')
-                return redirect('explore')
+                return redirect('profile_management')
             else:
-                messages.error(request, 'There was an error changing your password. Please try again')
+                messages.error(request, 'There was an error changing your password. Please try again.')
 
-    # Always render the forms, whether GET or POST
-    return render(request, 'profile.html', {
+    return render(request, 'profile_management.html', {
         'email_form': email_form,
         'password_form': password_form,
-        'listings': user_listings,
     })
+
+
+
+
 
 def delete_listing(request, id):
     listing = get_object_or_404(Products, id=id, user=request.user)
