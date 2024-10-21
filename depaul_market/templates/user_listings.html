@@ -2,8 +2,20 @@
 
 {% block head %}
 <body>
-    <h1>Listings by {{ user.username }}</h1>
+    <!-- Greeting -->
+    <h1>Welcome to {{ user.username }}'s Listings</h1>
 
+    <!-- Show the introduction if it exists, otherwise show a default message -->
+    <div class="intro-box">
+        <h3>About {{ user.username }}</h3>
+        {% if user.profile.introduction %}
+            <p>{{ user.profile.introduction }}</p>
+        {% else %}
+            <p>This user has not added an introduction yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Listings Section -->
     {% if listings %}
         <ul>
         {% for listing in listings %}
@@ -18,6 +30,7 @@
         <p>{{ user.username }} has not posted any listings yet.</p>
     {% endif %}
 
+    <!-- Back to Explore Button -->
     <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore</a>
 </body>
 {% endblock %}
