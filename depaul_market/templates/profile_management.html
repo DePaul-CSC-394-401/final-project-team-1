@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<body>
+    <a href="{% url 'profile_settings' %}" class="btn btn-primary">Back to Profile</a>
+
+    <h1>Manage Profile</h1>
+
+    <!-- Email Update Form -->
+    <form method="POST">
+        {% csrf_token %}
+        {{ email_form.as_p }}
+        <button type="submit" name="update_email">Update Email</button>
+    </form>
+
+    <!-- Password Change Form -->
+    <form method="POST">
+        {% csrf_token %}
+        {{ password_form.as_p }}
+        <button type="submit" name="change_password">Change Password</button>
+    </form>
+
+    <!-- Introduction Update Form -->
+    <form method="POST">
+        {% csrf_token %}
+        {{ profile_form.as_p }}  <!-- Display the form for updating the introduction -->
+        <button type="submit" name="update_profile">Update Profile</button>
+    </form>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+{% endblock %}

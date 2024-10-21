@@ -2,32 +2,27 @@
 
 {% block head %}
 <body>
-    <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore</a>
 
-    <h1>Profile Management</h1>
+    <!-- Back to Explore and Profile Management buttons -->
+    <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore |</a>
+    <a href="{% url 'profile_management' %}" class="btn btn-primary">Profile Management</a>
 
-    <!-- Form for email update -->
-    <form method="POST" action="{% url 'profile_settings' %}">
-        {% csrf_token %}
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="{{ user.email }}">
-        <button type="submit" name="update_email">Update Email</button> 
-    </form>
+    <!-- Display Username at the top left -->
+    <div class="user-info">
+        <h2>Welcome, {{ request.user.username }}!</h2>
+    </div>
 
-    <!-- Form for password change -->
-    <form method="POST" action="{% url 'profile_settings' %}">
-        {% csrf_token %}
-        {{ password_form.as_p }}
-        <button type="submit" name="change_password">Change Password</button> 
-    </form>
+    <!-- Display the User's Introduction -->
+    <div class="intro-box">
+        <h3>About {{ request.user.username }}</h3>
+        {% if request.user.profile.introduction %}
+            <p>{{ request.user.profile.introduction }}</p>
+        {% else %}
+            <p>No introduction provided yet. Please update your profile to add one!</p>
+        {% endif %}
+    </div>
 
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <h1>Profile</h1>
 
     <h2>Your Listings</h2>
     {% if listings %}
