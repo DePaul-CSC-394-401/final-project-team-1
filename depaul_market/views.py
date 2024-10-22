@@ -18,6 +18,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import EditListingForm
 from .forms import EmailUpdateForm, ProfileUpdateForm  # Add ProfileUpdateForm
 
+from datetime import timedelta  # Add this at the top of the file
+
+from datetime import timedelta
+
 
 
 # Index view
@@ -31,32 +35,27 @@ def listings(request):
     price_sort = request.GET.get('price')
     date_sort = request.GET.get('date_listed')
 
-    products = Products.objects.all()
-    print(price_sort)
-    print(location)
+    # Only show products that are still available
+    products = Products.objects.filter(
+        models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now())
+    )
 
     if query:
         products = products.filter(name__icontains=query)
     if location:
-        # Debugging: Print the initial queryset
-        print(f"Initial Products: {products}")
         products = products.filter(user__profile__campus=location)
-        # Debugging: Print the filtered queryset
-        print(f"Filtered Products by Location: {products}")
     if price_sort == 'min':
         products = products.order_by('price')
     elif price_sort == 'max':
         products = products.order_by('-price')
-
-        # Sort by date listed if specified
     if date_sort == 'newest':
         products = products.order_by('-made_available')
     elif date_sort == 'oldest':
         products = products.order_by('made_available')
 
     context = {'products': products}
-
     return render(request, 'explore.html', context)
+
 
 # Signup view
 def signup(request):
@@ -103,12 +102,42 @@ def addProduct(request):
     if request.method == 'POST':
         form = ProductsForm(request.POST, request.FILES)
         if form.is_valid():
-            product = form.save(commit=False) 
-            product.user = request.user 
-            product.save()  
-        return redirect('/explore')
+            product = form.save(commit=False)
+            product.user = request.user
+
+            # Handle availability duration
+            duration = request.POST.get('availability_duration')  # Get availability duration
+            if duration:  # If a duration was set
+                hours = int(duration)
+                product.available_until = datetime.now() + timedelta(hours=hours)  # Set available_until
+
+            product.save()
+            return redirect('/explore')
+    
     context = {'ProductsForm': form}
     return render(request, 'add_listing.html', context)
+
+def addProduct(request):
+    form = ProductsForm()
+    if request.method == 'POST':
+        form = ProductsForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save(commit=False) 
+            product.user = request.user
+            
+            # Capture availability duration from the form (it will be in hours or days, for example)
+            availability_duration = form.cleaned_data.get('availability_duration', None)
+            
+            if availability_duration:
+                # Calculate the available_until time by adding the duration to the current time
+                product.available_until = datetime.now() + timedelta(hours=availability_duration)
+            
+            product.save()  # Save the product with the available_until field
+        return redirect('/explore')
+    
+    context = {'ProductsForm': form}
+    return render(request, 'add_listing.html', context)
+
 
 def add_to_cart(request):
     if request.method == 'POST':

@@ -6,15 +6,23 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 from .models import Products, Profile  # Add Profile here
 
+from .models import Products 
 
 # Existing ProductsForm
+
 class ProductsForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Give Item a Name'}))
+    
+    # Add availability duration field (optional)
+    availability_duration = forms.IntegerField(
+        required=False,  # Optional field
+        widget=forms.NumberInput(attrs={'placeholder': 'Available for (hours)'}),
+        label="Availability Duration (hours)"
+    )
 
     class Meta:
-        model = Products
-        fields = ['image', 'name', 'price', 'description']
-
+        model = Products  # Specify the model here
+        fields = ['image', 'name', 'price', 'description', 'availability_duration']  # Include all the necessary fields
 
 
 # New form for updating email
