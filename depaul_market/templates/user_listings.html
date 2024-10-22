@@ -2,6 +2,8 @@
 
 {% block head %}
 <body>
+    <!-- Back to Explore Button -->
+    <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore</a>
     <!-- Greeting -->
     <h1>Welcome to {{ user.username }}'s Listings</h1>
 
@@ -30,7 +32,6 @@
         <p>{{ user.username }} has not posted any listings yet.</p>
     {% endif %}
 
-    <!-- Back to Explore Button -->
-    <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore</a>
+    
 </body>
 {% endblock %}

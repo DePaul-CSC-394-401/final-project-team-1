@@ -63,6 +63,11 @@
                 <p>Price: ${{ product.price }}</p>
                 <p>Made Available: {{ product.made_available }}</p>
                 <p>Location: {{product.user.profile.get_campus_display}}</p>
+
+                <!-- Display product availability if set -->
+                {% if product.available_until %} 
+                    <p><strong>Available Until: {{ product.available_until }}</strong></p>
+                {% endif %}
                 
                 <!-- Link to the user's profile with all their listings -->
                 <a href="{% url 'user_listings' product.user.id %}" > {{ product.user.username }} </a>
