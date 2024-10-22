@@ -3,10 +3,11 @@
 {% block head %}
 <body>
 
-    <!-- Back to Explore and Profile Management buttons -->
-    <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore |</a>
-    <a href="{% url 'profile_management' %}" class="btn btn-primary">Profile Management</a>
-
+    <div class="profile-nav-container">
+        <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore </a>
+        <a href="{% url 'profile_management' %}" class="btn btn-primary">Profile Management</a>
+    </div>
+    
     <!-- Display Username at the top left -->
     <div class="user-info">
         <h2>Welcome, {{ request.user.username }}!</h2>
@@ -22,35 +23,35 @@
         {% endif %}
     </div>
 
-    <h1>Profile</h1>
-
-    <h2>Your Listings</h2>
+    <h1>Your Listings</h1>
     {% if listings %}
-        <ul>
+    <div class="profile-listing-grid">
         {% for listing in listings %}
-            <li>
-                <p><strong>{{ listing.name }}</strong> - ${{ listing.price }}</p>
-                <p>{{ listing.description }}</p>
-                <img src="{{ listing.image.url }}" width="200" height="200" alt="Listing Image">
+        <div class="profile-listing-card">
+            <img src="{{ listing.image.url }}" width="200" height="200" alt="Listing Image">
+            <p><strong>{{ listing.name }}</strong> - ${{ listing.price }}</p>
+            <p>{{ listing.description }}</p>
 
-                <!-- Only show edit and delete buttons if the listing belongs to the logged-in user -->
-                {% if request.user == listing.user %}
-                    <!-- Link to edit listing page -->
-                    <a href="{% url 'edit_listing' listing.id %}">
-                        <button type="button">Edit</button>
-                    </a>
+            <!-- Only show edit and delete buttons if the listing belongs to the logged-in user -->
+            {% if request.user == listing.user %}
+            <div class="listing-buttons">
+                <!-- Link to edit listing page -->
+                <a href="{% url 'edit_listing' listing.id %}">
+                    <button type="button">Edit</button>
+                </a>
 
-                    <!-- Form to delete listing -->
-                    <form action="{% url 'delete_listing' listing.id %}" method="POST" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit">Delete</button>
-                    </form>
-                {% endif %}
-            </li>
+                <!-- Form to delete listing -->
+                <form action="{% url 'delete_listing' listing.id %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
         {% endfor %}
-        </ul>
+    </div>
     {% else %}
-        <p>You have no listings yet.</p>
+    <p>You have no listings yet.</p>
     {% endif %}
 </body>
 {% endblock %}
