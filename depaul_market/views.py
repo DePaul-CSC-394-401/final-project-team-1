@@ -4,10 +4,27 @@ from django.contrib import messages
 from .models import Profile
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
-from .models import Products, UserCart
+from .models import Products, UserCart, Wallet
 from .forms import ProductsForm
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .forms import EmailUpdateForm  
+from django.shortcuts import get_object_or_404
+from .models import Products
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Products
+from .forms import ProductsForm, Walletform
+
+from .models import Products  # Remove Listing import and replace with Products
+
+from .forms import EditListingForm
+
 
 # Index view
 def index(request):
@@ -97,11 +114,114 @@ def view_cart(request):
 def payment(request):
     if request.method == 'POST':
         cart_items = UserCart.objects.filter(user=request.user)
-        
-        if cart_items.exists():
-            for items in cart_items:
-                items.products.delete()
-            cart_items.delete()
-            
-        messages.success(request, 'Thank you for your purchase')
+        wallet = get_object_or_404(Wallet, user=request.user)
+        cart_list = UserCart.objects.filter(user=request.user)
+        total = 0
+        for item in cart_list:
+            total += item.products.price
+        if wallet.balance >= total:
+            if cart_items.exists():
+                wallet.balance-=total
+                wallet.save()
+                for items in cart_items:
+                    items.products.delete()
+                cart_items.delete()
+
+            messages.success(request, 'Thank you for your purchase')
+        else:
+            messages.success(request, 'Not enough money, your broke')
     return redirect('cart')
+
+def remove(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        product = get_object_or_404(Products, id=product_id)
+        cart_items = UserCart.objects.filter(user=request.user, products=product)
+        if cart_items.exists():
+            cart_items.delete()
+        return redirect('cart')
+    return render (request, 'cart')
+
+def profile_settings(request):
+    user_listings = Products.objects.filter(user=request.user)
+
+    email_form = EmailUpdateForm(instance=request.user)
+    password_form = PasswordChangeForm(user=request.user)
+
+    if request.method == 'POST':
+        # Handle Email Update
+        if 'update_email' in request.POST:
+            email_form = EmailUpdateForm(request.POST, instance=request.user)
+            if email_form.is_valid():
+                email_form.save()
+                messages.success(request, 'Your email was successfully updated!')
+                return redirect('explore')
+            else:
+                messages.error(request, 'There was an error updating your email.')
+
+        # Handle Password Change
+        if 'change_password' in request.POST:
+            password_form = PasswordChangeForm(user=request.user, data=request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)  # Keep the user logged in
+                messages.success(request, 'Your password was successfully updated!')
+                return redirect('explore')
+            else:
+                messages.error(request, 'There was an error changing your password.')
+
+    # Always render the forms, whether GET or POST
+    return render(request, 'profile.html', {
+        'email_form': email_form,
+        'password_form': password_form,
+        'listings': user_listings,
+    })
+
+def delete_listing(request, id):
+    listing = get_object_or_404(Products, id=id, user=request.user)
+    if request.method == 'POST':
+        listing.delete()
+        return redirect('profile_settings')
+'''
+def user_listings(request, user_id):
+    print(f"Fetching listings for user ID: {user_id}")
+    user = get_object_or_404(User, id=user_id)
+    listings = Products.objects.filter(user=user)
+    print(f"Found {listings.count()} listings for user {user.username}")
+
+    return render(request, 'user_listings.html', {
+        'user': user,
+        'listings': listings,
+    })
+'''
+def user_listings(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    listings = Products.objects.filter(user=user)
+    return render(request, 'user_listings.html', {'user': user, 'listings': listings})
+
+
+def edit_listing(request, listing_id):
+    listing = get_object_or_404(Products, id=listing_id, user=request.user)
+    if request.method == 'POST':
+        form = ProductsForm(request.POST, request.FILES, instance=listing)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_settings')
+    else:
+        form = ProductsForm(instance=listing)
+    return render(request, 'edit_listing.html', {'form': form})
+
+def wallet(request):
+    money = Wallet.objects.get(user=request.user)
+    if not money:
+        money = Wallet.objects.create(user=request.user, balance = 0)
+    if request.method == 'POST':
+        form = Walletform(request.POST)
+        if form.is_valid():
+            current = form.cleaned_data['money']
+            money.balance += (current)
+            money.save()
+            return redirect('wallet')
+    else:
+        form = Walletform()
+    return render(request, 'wallet.html', {'form': form, 'wallet' : money})
