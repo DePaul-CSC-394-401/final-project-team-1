@@ -23,47 +23,42 @@
         {% endif %}
     </div>
 
-    <!-- Current Listings Section -->
-    <h2>Current Listings</h2>
-    {% if current_listings %}
-    <div class="profile-listing-grid">
-        {% for listing in current_listings %}
-        <div class="profile-listing-card">
-            <img src="{{ listing.image.url }}" width="200" height="200" alt="Listing Image">
-            <p><strong>{{ listing.name }}</strong> - ${{ listing.price }}</p>
-            <p>{{ listing.description }}</p>
+<!-- Current Listings Section -->
+<h2>Current Listings</h2>
+{% if current_listings %}
+<div class="profile-listing-grid">
+    {% for listing in current_listings %}
+    <div class="profile-listing-card">
+        <img src="{{ listing.image.url }}" width="200" height="200" alt="Listing Image">
+        <p><strong>{{ listing.name }}</strong> - ${{ listing.price }}</p>
+        <p>{{ listing.description }}</p>
 
-                {% if request.user == listing.user %}
-                <form action="{% url 'product_archive' listing.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Hold</button>
-                </form>
-                {% endif %}
+        {% if request.user == listing.user %}
+        <form action="{% url 'product_archive' listing.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Hold</button>
+        </form>
+        {% endif %}
 
-                <!-- Only show edit and delete buttons if the listing belongs to the logged-in user -->
-                {% if request.user == listing.user %}
-                    <!-- Link to edit listing page -->
-                    <a href="{% url 'edit_listing' listing.id %}">
-                        <button type="button">Edit</button>
-                    </a>
-            <!-- Only show edit and delete buttons if the listing belongs to the logged-in user -->
-            {% if request.user == listing.user %}
-            <div class="listing-buttons">
-                <a href="{% url 'edit_listing' listing.id %}">
-                    <button type="button">Edit</button>
-                </a>
-                <form action="{% url 'delete_listing' listing.id %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit">Delete</button>
-                </form>
-            </div>
-            {% endif %}
+        <!-- Only show edit and delete buttons if the listing belongs to the logged-in user -->
+        {% if request.user == listing.user %}
+        <div class="listing-buttons">
+            <a href="{% url 'edit_listing' listing.id %}">
+                <button type="button">Edit</button>
+            </a>
+            <form action="{% url 'delete_listing' listing.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
         </div>
-        {% endfor %}
+        {% endif %}
     </div>
-    {% else %}
-    <p>You have no current listings.</p>
-    {% endif %}
+    {% endfor %}
+</div>
+{% else %}
+<p>You have no current listings.</p>
+{% endif %}
+
 
     <!-- Sold Listings Section -->
     <h2>Sold Listings</h2>
