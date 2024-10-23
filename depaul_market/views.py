@@ -37,8 +37,9 @@ def listings(request):
 
     # Only show products that are still available and not sold
     products = Products.objects.filter(
-        (models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now())) & 
-        models.Q(is_sold=False)  # Filter out sold products
+      (models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now())) & 
+        models.Q(is_sold=False) &  # Filter out sold products
+        models.Q(on_hold=False)    # Filter out products that are on hold
     )
 
     if query:
@@ -201,9 +202,11 @@ def remove(request):
         return redirect('cart')
     return render (request, 'cart')
 
-@login_required
 def profile_settings(request):
-    user_listings = Products.objects.filter(user=request.user)
+    # Get all listings for the current user that are not on hold
+    user_listings = Products.objects.filter(user=request.user, on_hold=False)
+    
+    # Separate the listings into current and sold listings
     current_listings = user_listings.filter(is_sold=False)  # Current active listings
     sold_listings = user_listings.filter(is_sold=True)      # Sold listings
 
@@ -211,6 +214,7 @@ def profile_settings(request):
         'current_listings': current_listings,
         'sold_listings': sold_listings,
     })
+
 
 
 def profile_management(request):
@@ -276,6 +280,27 @@ def edit_listing(request, listing_id):
     else:
         form = ProductsForm(instance=listing)
     return render(request, 'edit_listing.html', {'form': form})
+
+# View to see listings on hold
+def hold_listings(request):
+    products = Products.objects.filter(user=request.user, on_hold=True)
+    return render(request, 'hold_products.html', {'products': products})
+
+# To put a product on hold
+def hold_products(request, pk):
+    listings = Products.objects.get(id=pk)
+    if request.method == 'POST':  
+        listings.on_hold = True  
+        listings.save()  
+        return redirect('profile_settings')  
+    return redirect('profile') 
+
+def restoreProduct(request, pk):
+    listings = Products.objects.get(id=pk)
+    listings.on_hold = False 
+    listings.save()
+    return redirect('hold_products') 
+
 
 def wallet(request):
     try:

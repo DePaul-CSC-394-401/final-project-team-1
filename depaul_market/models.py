@@ -10,6 +10,7 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     description = models.TextField(blank=True, null=True)
     made_available = models.DateTimeField(auto_now=True)
+    on_hold = models.BooleanField(default=False)
 
     available_until = models.DateTimeField(null=True, blank=True)  # This field can be null if no duration is provided
 
