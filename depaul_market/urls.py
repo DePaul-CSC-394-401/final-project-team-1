@@ -25,4 +25,7 @@ urlpatterns = [
     path('delete_listing/<int:id>/', views.delete_listing, name='delete_listing'),
     path('user/<int:user_id>/listings/', views.user_listings, name='user_listings'),
     path('wallet', views.wallet, name='wallet'),
+
+    path('relist/<int:product_id>/', views.relist_product, name='relist_product'),
+
 ]

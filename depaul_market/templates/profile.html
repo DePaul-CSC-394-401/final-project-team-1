@@ -61,6 +61,14 @@
             <img src="{{ listing.image.url }}" width="200" height="200" alt="Listing Image">
             <p><strong>{{ listing.name }}</strong> - ${{ listing.price }}</p>
             <p>{{ listing.description }}</p>
+        
+            <!-- Relist Button for Sold Listings -->
+            {% if listing.is_sold %}
+            <form action="{% url 'relist_product' listing.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Relist</button>
+            </form>
+            {% endif %}
         </div>
         {% endfor %}
     </div>
