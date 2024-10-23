@@ -159,7 +159,7 @@ def view_cart(request):
         total += item.products.price
     context = {'cart_list': cart_list, 'total': total}
     return render(request, 'cart.html', context)
-
+'''
 def payment(request):
     if request.method == 'POST':
         cart_items = UserCart.objects.filter(user=request.user)
@@ -180,6 +180,36 @@ def payment(request):
         else:
             messages.success(request, 'Not enough money, your broke')
     return redirect('cart')
+'''
+def payment(request):
+    if request.method == 'POST':
+        cart_items = UserCart.objects.filter(user=request.user)
+        wallet = get_object_or_404(Wallet, user=request.user)
+        total = 0
+        for item in cart_items:
+            total += item.products.price
+
+        if wallet.balance >= total:
+            if cart_items.exists():
+                wallet.balance -= total
+                wallet.save()
+
+                # Mark each product as sold
+                for item in cart_items:
+                    mark_as_sold(item.products.id)  # Call mark_as_sold function here
+                
+                cart_items.delete()
+
+            messages.success(request, 'Thank you for your purchase')
+        else:
+            messages.error(request, 'Not enough money, your broke')
+    return redirect('cart')
+
+def mark_as_sold(product_id):
+    product = Products.objects.get(id=product_id)
+    product.is_sold = True
+    product.save()
+
 
 def remove(request):
     if request.method == 'POST':
@@ -191,12 +221,25 @@ def remove(request):
         return redirect('cart')
     return render (request, 'cart')
 
-
+'''
 @login_required
 def profile_settings(request):
     user_listings = Products.objects.filter(user=request.user)
     return render(request, 'profile.html', {
         'listings': user_listings,
+    })
+'''
+@login_required
+def profile_settings(request):
+    # Get current listings (unsold)
+    current_listings = Products.objects.filter(user=request.user, is_sold=False)
+    
+    # Get sold listings
+    sold_listings = Products.objects.filter(user=request.user, is_sold=True)
+
+    return render(request, 'profile.html', {
+        'current_listings': current_listings,
+        'sold_listings': sold_listings,
     })
 
 def profile_management(request):
