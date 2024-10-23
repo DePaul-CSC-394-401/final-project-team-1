@@ -198,7 +198,7 @@ button[type="submit"]:hover {
 .form-group label {
     display: block;
     margin-bottom: 5px;
-    color: white;
+    color: black;
 }
 
 .form-group input {
@@ -499,5 +499,4 @@ footer p {
 .profile-listing-card button:hover {
     background-color: #0056b3;
 }
-
 

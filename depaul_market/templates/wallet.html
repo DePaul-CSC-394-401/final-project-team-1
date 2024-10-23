@@ -3,7 +3,9 @@
 {% block head %}
 {% load static %}
 
-<h1> <a href="{% url 'explore' %}">Home</a> <h1>
+<div class="profile-nav-container">
+    <a href="{% url 'explore' %}"> Home</a>
+</div>
 <h1>Wallet</h1>
 
 <h2>Balance: ${{wallet.balance}}</h2>
