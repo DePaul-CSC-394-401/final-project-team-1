@@ -1,125 +1,272 @@
+
+/* General Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
 /* Header Container */
 .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px 20px;
-    background-color: #ecf0f1;
+    background-color: #1E4D9B; /* DePaul Blue */
     border-radius: 8px;
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-top: 4px solid #2980b9; /* Border for the header section */
+    border-top: 4px solid #CC0000; /* DePaul Red border for contrast */
 }
 
+/* Navigation Links */
+.nav-links a {
+    margin-right: 15px;
+    text-decoration: none;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 8px 12px;
+    background-color: #1E4D9B;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: #CC0000; /* DePaul Red */
+    color: white;
+}
+
+/* Sidebar Container */
 .sidebar-container {
     display: flex;
 }
 
+/* Sidebar Styling */
 .sidebar {
     width: 25%;
-    padding: 10px;
+    padding: 15px;
+    background-color: #003f87; /* DePaul Blue background */
+    color: white; /* White text for better contrast */
     border-right: 1px solid #ccc;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
 }
 
+/* Filter Section */
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-section label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.filter-section .dropdown {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.filter-section .dropdown input[type="radio"] {
+    margin-right: 10px;
+}
+
+.filter-section .dropdown label {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+/* Search and Filter Inputs */
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Search Button */
+button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Listing Grid */
 .listing-grid {
     width: 75%;
     padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
-.header-container {
-    background-color: #f8f9fa;
+/* Listing Cards */
+.listing-card {
+    width: 250px;
     padding: 10px;
-    border-bottom: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease;
 }
 
-.nav-links a {
-    margin-right: 10px;
-    text-decoration: none;
-    color: #007bff;
-}   
+.listing-card:hover {
+    transform: scale(1.02);
+}
 
-.nav-links a:hover {
+.listing-card img {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.listing-card p {
+    margin: 5px 0;
+}
+
+/* Styling for Listing Text */
+.listing-card p strong {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.listing-card p:first-of-type {
+    font-weight: bold;
+    font-size: 16px;
+    color: #2980b9;
+}
+
+/* Add to Cart Button */
+.listing-card button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.listing-card button:hover {
+    background-color: #0056b3;
+}
+
+/* Links for Location and Username */
+.listing-card a {
+    color: #2980b9;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.listing-card a:hover {
     text-decoration: underline;
 }
 
-
-
+/* Auth Container (Login/Signup) */
 .auth-container {
-    background-color: black;
+    background-color: #1E4D9B;
     color: white;
     width: 400px;
     padding: 30px;
     border-radius: 15px;
     margin: 100px auto;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added shadow for modern look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* disabled css for login and signup, will turn it on after POS
 .auth-container h2 {
     margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
+    color: #FFFFFF;
 }
 
 .form-group label {
     display: block;
     margin-bottom: 5px;
+    color: white;
 }
 
-.form-group input[type="email"],
-.form-group input[type="password"],
-.form-group input[type="text"],
-.form-group select {
+.form-group input {
     width: 100%;
     padding: 10px;
     margin: 5px 0;
     border: none;
     border-radius: 5px;
-    box-sizing: border-box;
-    background-color: #333; 
-    color: white;
-}
-
-.form-group input[type="checkbox"] {
-    display: inline-block;
-    margin-right: 10px;
 }
 
 .auth-btn {
     width: 100%;
     padding: 10px;
-    background-color: purple;
+    background-color: #CC0000;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 15px;
-    font-weight: bold;
 }
 
 .auth-btn:hover {
-    background-color: #5e33a5;
+    background-color: #1E4D9B;
 }
 
-.switch-link {
-    color: #ccc;
-    text-decoration: none;
+/* Profile Page */
+.profile-container {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.switch-link:hover {
-    color: white;
-    text-decoration: underline;
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-p {
-    margin-top: 10px;
+.profile-header h1 {
+    color: #1E4D9B;
+    font-size: 28px;
+    margin: 0;
 }
-*/
 
+.intro-box {
+    padding: 15px;
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    font-size: 1.1em;
+}
+
+.intro-box h3 {
+    color: #1E4D9B;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.intro-box p {
+    font-size: 16px;
+    color: #333;
+}
+/* Messages (Error/Success) */
 .messages {
     list-style: none;
     padding: 0;
@@ -131,13 +278,226 @@ p {
     margin-bottom: 10px;
     border-radius: 5px;
     color: white;
+    font-weight: bold;
 }
 
 .messages li.success {
-    background-color: #4CAF50; /* Green for success messages */
+    background-color: #4CAF50;
 }
 
 .messages li.error {
-    background-color: #f44336; /* Red for error messages */
+    background-color: #f44336;
 }
+
+/* Footer */
+footer {
+    background-color: #1E4D9B;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    border-top: 2px solid #CC0000;
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-management {
+        width: 90%;
+    }
+
+    .user-info, .intro-box {
+        font-size: 1em;
+    }
+
+    .btn-primary {
+        width: 100%; 
+        margin-bottom: 10px; 
+    }
+
+    /* Adjust sidebar for mobile screens */
+    .sidebar {
+        width: 100%; 
+        border-right: none; 
+        margin-bottom: 20px; 
+        position: relative; 
+    }
+
+    .listing-grid {
+        width: 100%;
+    }
+
+    /* Adjust listing cards for mobile */
+    .listing-card {
+        width: 100%; 
+        margin-bottom: 20px; 
+    }
+
+    /* Adjust image size for listings on mobile */
+    .listing-card img {
+        max-width: 100%;
+        height: auto; 
+    }
+
+    /* Adjust filters for mobile */
+    .filter-section .dropdown {
+        display: flex;
+        flex-direction: row; 
+        flex-wrap: wrap; 
+    }
+
+    .filter-section .dropdown label {
+        flex: 1 0 50%; 
+        margin-left: 0; 
+    }
+}
+
+/* Further adjustments for very small screens */
+@media (max-width: 576px) {
+    .profile-management {
+        width: 100%; 
+    }
+
+    .sidebar {
+        padding: 10px; 
+    }
+
+    .listing-card {
+        padding: 10px; 
+    }
+
+    .listing-card img {
+        width: 100%; 
+    }
+
+    /* Make navigation links stack vertically on mobile */
+    .nav-links a {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    /* Adjust buttons */
+    .btn-primary {
+        padding: 10px 15px; 
+        font-size: 1em; 
+    }
+}
+/* Navigation Links - Consistent with Explore Page */
+.nav-links a {
+    margin-right: 15px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 8px 12px;
+    background-color: #1E4D9B;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: #CC0000; /* DePaul Red */
+    color: white;
+}
+
+.header-container {
+    display: flex;
+    justify-content: flex-start; /* Align to the left */
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #1E4D9B; /* DePaul Blue */
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #CC0000; /* Red top border */
+}
+
+/* Container styling for the links */
+.profile-nav-container {
+    padding: 10px;
+    background-color: #1E4D9B; /* DePaul Blue */
+    border-radius: 8px;
+    border-top: 4px solid #CC0000; /* DePaul Red border for contrast */
+    display: flex;
+    justify-content: flex-start; /* Align links to the left */
+    gap: 15px;
+}
+
+/* Styling for the links in profile pages */
+.profile-nav-container a {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 8px 12px;
+    background-color: #1E4D9B;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.profile-nav-container a:hover {
+    background-color: #CC0000; 
+}
+
+/* Hover effect for consistency */
+.profile-nav-container a:hover {
+    background-color: #CC0000;
+    text-decoration: underline;
+}
+
+/* Profile Listing grid adjustment */
+.profile-listing-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; 
+    padding: 20px 0;
+}
+
+/* Profile listing card adjustments */
+.profile-listing-card {
+    width: 250px; 
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for better visibility */
+    text-align: center;
+}
+
+.profile-listing-card img {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.profile-listing-card p {
+    margin: 5px 0;
+}
+
+/* Edit and Delete buttons aligned horizontally */
+.profile-listing-card .listing-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Style for the edit and delete buttons */
+.profile-listing-card button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.profile-listing-card button:hover {
+    background-color: #0056b3;
+}
+
 
