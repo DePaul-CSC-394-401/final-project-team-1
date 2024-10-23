@@ -2,11 +2,10 @@
 
 {% block head %}
 <body>
-    <h1>Add Item</h1>
-    <div class="nav-links">
-        <a href="{% url 'explore' %}"> Back to Explore Page</a>
+    <div class="profile-nav-container">
+        <a href="{% url 'explore' %}">Home</a>
     </div>
-
+    <h1>Add Item</h1>
     <form action="" method="post" enctype="multipart/form-data">
 
         {% csrf_token %}
@@ -29,6 +28,13 @@
         <div class="form-group">
             <label for="description">Description:</label>
             {{ ProductsForm.description }}
+        </div>
+
+        <!-- New optional field for availability time span -->
+        <div class="form-group">
+            <label for="availability_duration">Set Availability Duration (Optional):</label>
+            {{ ProductsForm.availability_duration }}
+            <p class="form-help">Specify the availability time in hours. Leave blank for indefinite availability.</p>
         </div>
 
         <div class="form-group">

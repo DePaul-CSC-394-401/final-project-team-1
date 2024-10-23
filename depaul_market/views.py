@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Profile
+from .models import Profile, Wallet
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
 from .models import Products, UserCart
@@ -14,16 +14,14 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import EmailUpdateForm  
 from django.shortcuts import get_object_or_404
-from .models import Products
-
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Products
-from .forms import ProductsForm
+from .forms import EditListingForm, Walletform
+from .forms import EmailUpdateForm, ProfileUpdateForm  # Add ProfileUpdateForm
 
-from .models import Products  # Remove Listing import and replace with Products
+from datetime import timedelta  # Add this at the top of the file
 
-from .forms import EditListingForm
+from datetime import timedelta
+
 
 
 # Index view
@@ -37,32 +35,27 @@ def listings(request):
     price_sort = request.GET.get('price')
     date_sort = request.GET.get('date_listed')
 
-    products = Products.objects.filter(on_hold=False)
-    print(price_sort)
-    print(location)
+    # Only show products that are still available
+    products = Products.objects.filter(
+        models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now()), on_hold=False
+    )
 
     if query:
         products = products.filter(name__icontains=query)
     if location:
-        # Debugging: Print the initial queryset
-        print(f"Initial Products: {products}")
         products = products.filter(user__profile__campus=location)
-        # Debugging: Print the filtered queryset
-        print(f"Filtered Products by Location: {products}")
     if price_sort == 'min':
         products = products.order_by('price')
     elif price_sort == 'max':
         products = products.order_by('-price')
-
-        # Sort by date listed if specified
     if date_sort == 'newest':
         products = products.order_by('-made_available')
     elif date_sort == 'oldest':
         products = products.order_by('made_available')
 
     context = {'products': products}
-
     return render(request, 'explore.html', context)
+
 
 # Signup view
 def signup(request):
@@ -109,12 +102,42 @@ def addProduct(request):
     if request.method == 'POST':
         form = ProductsForm(request.POST, request.FILES)
         if form.is_valid():
-            product = form.save(commit=False) 
-            product.user = request.user 
-            product.save()  
-        return redirect('/explore')
+            product = form.save(commit=False)
+            product.user = request.user
+
+            # Handle availability duration
+            duration = request.POST.get('availability_duration')  # Get availability duration
+            if duration:  # If a duration was set
+                hours = int(duration)
+                product.available_until = datetime.now() + timedelta(hours=hours)  # Set available_until
+
+            product.save()
+            return redirect('/explore')
+    
     context = {'ProductsForm': form}
     return render(request, 'add_listing.html', context)
+
+def addProduct(request):
+    form = ProductsForm()
+    if request.method == 'POST':
+        form = ProductsForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save(commit=False) 
+            product.user = request.user
+            
+            # Capture availability duration from the form (it will be in hours or days, for example)
+            availability_duration = form.cleaned_data.get('availability_duration', None)
+            
+            if availability_duration:
+                # Calculate the available_until time by adding the duration to the current time
+                product.available_until = datetime.now() + timedelta(hours=availability_duration)
+            
+            product.save()  # Save the product with the available_until field
+        return redirect('/explore')
+    
+    context = {'ProductsForm': form}
+    return render(request, 'add_listing.html', context)
+
 
 def add_to_cart(request):
     if request.method == 'POST':
@@ -140,20 +163,49 @@ def view_cart(request):
 def payment(request):
     if request.method == 'POST':
         cart_items = UserCart.objects.filter(user=request.user)
+        wallet = get_object_or_404(Wallet, user=request.user)
+        cart_list = UserCart.objects.filter(user=request.user)
+        total = 0
+        for item in cart_list:
+            total += item.products.price
+        if wallet.balance >= total:
+            if cart_items.exists():
+                wallet.balance-=total
+                wallet.save()
+                for items in cart_items:
+                    items.products.delete()
+                cart_items.delete()
 
-        if cart_items.exists():
-            for items in cart_items:
-                items.products.delete()
-            cart_items.delete()
-
-        messages.success(request, 'Thank you for your purchase')
+            messages.success(request, 'Thank you for your purchase')
+        else:
+            messages.success(request, 'Not enough money, your broke')
     return redirect('cart')
 
+def remove(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        product = get_object_or_404(Products, id=product_id)
+        cart_items = UserCart.objects.filter(user=request.user, products=product)
+        if cart_items.exists():
+            cart_items.delete()
+        return redirect('cart')
+    return render (request, 'cart')
+
+
+@login_required
 def profile_settings(request):
     user_listings = Products.objects.filter(user=request.user, on_hold=False)
+    return render(request, 'profile.html', {
+        'listings': user_listings,
+    })
 
+def profile_management(request):
+    # Existing email and password forms
     email_form = EmailUpdateForm(instance=request.user)
     password_form = PasswordChangeForm(user=request.user)
+
+    # New profile form for introduction
+    profile_form = ProfileUpdateForm(instance=request.user.profile)
 
     if request.method == 'POST':
         # Handle Email Update
@@ -162,26 +214,29 @@ def profile_settings(request):
             if email_form.is_valid():
                 email_form.save()
                 messages.success(request, 'Your email was successfully updated!')
-                return redirect('explore')
-            else:
-                messages.error(request, 'There was an error updating your email.')
+                return redirect('profile_management')
 
         # Handle Password Change
         if 'change_password' in request.POST:
             password_form = PasswordChangeForm(user=request.user, data=request.POST)
             if password_form.is_valid():
                 user = password_form.save()
-                update_session_auth_hash(request, user)  # Keep the user logged in
+                update_session_auth_hash(request, user)
                 messages.success(request, 'Your password was successfully updated!')
-                return redirect('explore')
-            else:
-                messages.error(request, 'There was an error changing your password.')
+                return redirect('profile_management')
 
-    # Always render the forms, whether GET or POST
-    return render(request, 'profile.html', {
+        # Handle Profile (Introduction) Update
+        if 'update_profile' in request.POST:
+            profile_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, 'Your profile introduction was successfully updated!')
+                return redirect('profile_management')
+
+    return render(request, 'profile_management.html', {
         'email_form': email_form,
         'password_form': password_form,
-        'listings': user_listings,
+        'profile_form': profile_form,  # Pass the new profile form
     })
 
 def delete_listing(request, id):
@@ -189,18 +244,8 @@ def delete_listing(request, id):
     if request.method == 'POST':
         listing.delete()
         return redirect('profile_settings')
-'''
-def user_listings(request, user_id):
-    print(f"Fetching listings for user ID: {user_id}")
-    user = get_object_or_404(User, id=user_id)
-    listings = Products.objects.filter(user=user)
-    print(f"Found {listings.count()} listings for user {user.username}")
 
-    return render(request, 'user_listings.html', {
-        'user': user,
-        'listings': listings,
-    })
-'''
+
 def user_listings(request, user_id):
     user = get_object_or_404(User, id=user_id)
     listings = Products.objects.filter(user=user)
@@ -239,4 +284,19 @@ def restoreProduct(request, pk):
     return redirect('hold_products') 
 
 
+def wallet(request):
+    try:
+        money = Wallet.objects.get(user=request.user)
+    except Wallet.DoesNotExist:
+        money = Wallet.objects.create(user=request.user, balance = 0)
+    if request.method == 'POST':
+        form = Walletform(request.POST)
+        if form.is_valid():
+            current = form.cleaned_data['money']
+            money.balance += (current)
+            money.save()
+            return redirect('wallet')
+    else:
+        form = Walletform()
+    return render(request, 'wallet.html', {'form': form, 'wallet' : money})
 

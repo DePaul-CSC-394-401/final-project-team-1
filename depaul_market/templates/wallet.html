@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% load static %}
+
+<div class="profile-nav-container">
+    <a href="{% url 'explore' %}"> Home</a>
+</div>
+<h1>Wallet</h1>
+
+<h2>Balance: ${{wallet.balance}}</h2>
+
+<form method = 'POST'>
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type='submit'>Add Money</button>
+</form>
+
+
+{% endblock %}

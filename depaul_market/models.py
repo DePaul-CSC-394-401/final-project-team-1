@@ -12,6 +12,9 @@ class Products(models.Model):
     made_available = models.DateTimeField(auto_now=True)
     on_hold = models.BooleanField(default=False)
 
+    available_until = models.DateTimeField(null=True, blank=True)  # This field can be null if no duration is provided
+
+
     def __str__(self):
         return self.name
     
@@ -22,7 +25,6 @@ class Products(models.Model):
 class UserCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ForeignKey(Products, on_delete=models.CASCADE)
-    
 
 # Profile model to store additional student info
 class Profile(models.Model):
@@ -39,6 +41,16 @@ class Profile(models.Model):
         ('loop', 'Loop')
     ])
     graduating = models.BooleanField(default=False)
+    
+    # Add this field to store the user's self-written introduction
+    introduction = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username
+    
+class Wallet(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    balance = models.DecimalField(max_digits=100, decimal_places=2, default=0)
+    
+    def __str__(self):
+        return self.balance

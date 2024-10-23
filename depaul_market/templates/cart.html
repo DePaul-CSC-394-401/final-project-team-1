@@ -2,8 +2,12 @@
 
 {% block head %}
 {% load static %}
-<h1> <a href="{% url 'explore' %}">Home</a> <h1>
-<h2>Cart</h2>
+<div class="profile-nav-container">
+    <a href="{% url 'explore' %}">Home</a>
+</div>
+<h2>Shopping Cart</h2>
+<h2>Wish List:</h2>
+
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -20,6 +24,10 @@
         <p>Product Name: {{ items.products.name }}</p>
         <p>Info: {{ items.products.description }}</p>
         <p>Price: ${{ items.products.price }}</p>
+        <form method="POST" action="{% url 'remove' %}">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ items.products.id }}">
+            <button type="submit">remove</button>
         </form>
     </div>
 {% endfor %}
