@@ -37,7 +37,7 @@ def listings(request):
 
     # Only show products that are still available
     products = Products.objects.filter(
-        models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now())
+        models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now()), on_hold=False
     )
 
     if query:
@@ -194,7 +194,7 @@ def remove(request):
 
 @login_required
 def profile_settings(request):
-    user_listings = Products.objects.filter(user=request.user)
+    user_listings = Products.objects.filter(user=request.user, on_hold=False)
     return render(request, 'profile.html', {
         'listings': user_listings,
     })
@@ -262,6 +262,27 @@ def edit_listing(request, listing_id):
     else:
         form = ProductsForm(instance=listing)
     return render(request, 'edit_listing.html', {'form': form})
+
+# View to see listings on hold
+def hold_listings(request):
+    products = Products.objects.filter(user=request.user, on_hold=True)
+    return render(request, 'hold_products.html', {'products': products})
+
+# To put a product on hold
+def hold_products(request, pk):
+    listings = Products.objects.get(id=pk)
+    if request.method == 'POST':  
+        listings.on_hold = True  
+        listings.save()  
+        return redirect('profile_settings')  
+    return redirect('profile') 
+
+def restoreProduct(request, pk):
+    listings = Products.objects.get(id=pk)
+    listings.on_hold = False 
+    listings.save()
+    return redirect('hold_products') 
+
 
 def wallet(request):
     try:

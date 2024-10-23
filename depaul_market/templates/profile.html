@@ -32,6 +32,19 @@
             <p><strong>{{ listing.name }}</strong> - ${{ listing.price }}</p>
             <p>{{ listing.description }}</p>
 
+                {% if request.user == listing.user %}
+                <form action="{% url 'product_archive' listing.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Hold</button>
+                </form>
+                {% endif %}
+
+                <!-- Only show edit and delete buttons if the listing belongs to the logged-in user -->
+                {% if request.user == listing.user %}
+                    <!-- Link to edit listing page -->
+                    <a href="{% url 'edit_listing' listing.id %}">
+                        <button type="button">Edit</button>
+                    </a>
             <!-- Only show edit and delete buttons if the listing belongs to the logged-in user -->
             {% if request.user == listing.user %}
             <div class="listing-buttons">
