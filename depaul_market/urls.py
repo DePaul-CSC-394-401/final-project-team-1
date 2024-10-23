@@ -19,5 +19,7 @@ urlpatterns = [
     path('listing/<int:listing_id>/edit/', views.edit_listing, name='edit_listing'),  # Updated for clarity
     path('delete_listing/<int:id>/', views.delete_listing, name='delete_listing'),
     path('user/<int:user_id>/listings/', views.user_listings, name='user_listings'),
-
+    path('product_archive/<str:pk>/', views.hold_products, name='product_archive'),
+    path('hold_products/', views.hold_listings, name='hold_products'),
+    path('product_restore/<str:pk>/', views.restoreProduct, name='product_restore')
 ]

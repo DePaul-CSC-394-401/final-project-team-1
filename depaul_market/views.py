@@ -37,7 +37,7 @@ def listings(request):
     price_sort = request.GET.get('price')
     date_sort = request.GET.get('date_listed')
 
-    products = Products.objects.all()
+    products = Products.objects.filter(on_hold=False)
     print(price_sort)
     print(location)
 
@@ -150,7 +150,7 @@ def payment(request):
     return redirect('cart')
 
 def profile_settings(request):
-    user_listings = Products.objects.filter(user=request.user)
+    user_listings = Products.objects.filter(user=request.user, on_hold=False)
 
     email_form = EmailUpdateForm(instance=request.user)
     password_form = PasswordChangeForm(user=request.user)
@@ -217,4 +217,26 @@ def edit_listing(request, listing_id):
     else:
         form = ProductsForm(instance=listing)
     return render(request, 'edit_listing.html', {'form': form})
+
+# View to see listings on hold
+def hold_listings(request):
+    products = Products.objects.filter(user=request.user, on_hold=True)
+    return render(request, 'hold_products.html', {'products': products})
+
+# To put a product on hold
+def hold_products(request, pk):
+    listings = Products.objects.get(id=pk)
+    if request.method == 'POST':  
+        listings.on_hold = True  
+        listings.save()  
+        return redirect('profile_settings')  
+    return redirect('profile') 
+
+def restoreProduct(request, pk):
+    listings = Products.objects.get(id=pk)
+    listings.on_hold = False 
+    listings.save()
+    return redirect('hold_products') 
+
+
 
