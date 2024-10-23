@@ -181,6 +181,17 @@ def payment(request):
             messages.success(request, 'Not enough money, your broke')
     return redirect('cart')
 
+def remove(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        product = get_object_or_404(Products, id=product_id)
+        cart_items = UserCart.objects.filter(user=request.user, products=product)
+        if cart_items.exists():
+            cart_items.delete()
+        return redirect('cart')
+    return render (request, 'cart')
+
+
 @login_required
 def profile_settings(request):
     user_listings = Products.objects.filter(user=request.user)
