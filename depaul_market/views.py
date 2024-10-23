@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Profile
+from .models import Profile, Wallet
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
 from .models import Products, UserCart
@@ -15,7 +15,7 @@ from django.shortcuts import render, redirect
 from .forms import EmailUpdateForm  
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import EditListingForm
+from .forms import EditListingForm, Walletform
 from .forms import EmailUpdateForm, ProfileUpdateForm  # Add ProfileUpdateForm
 
 from datetime import timedelta  # Add this at the top of the file
@@ -163,13 +163,22 @@ def view_cart(request):
 def payment(request):
     if request.method == 'POST':
         cart_items = UserCart.objects.filter(user=request.user)
+        wallet = get_object_or_404(Wallet, user=request.user)
+        cart_list = UserCart.objects.filter(user=request.user)
+        total = 0
+        for item in cart_list:
+            total += item.products.price
+        if wallet.balance >= total:
+            if cart_items.exists():
+                wallet.balance-=total
+                wallet.save()
+                for items in cart_items:
+                    items.products.delete()
+                cart_items.delete()
 
-        if cart_items.exists():
-            for items in cart_items:
-                items.products.delete()
-            cart_items.delete()
-
-        messages.success(request, 'Thank you for your purchase')
+            messages.success(request, 'Thank you for your purchase')
+        else:
+            messages.success(request, 'Not enough money, your broke')
     return redirect('cart')
 
 @login_required
@@ -243,5 +252,19 @@ def edit_listing(request, listing_id):
         form = ProductsForm(instance=listing)
     return render(request, 'edit_listing.html', {'form': form})
 
-
+def wallet(request):
+    try:
+        money = Wallet.objects.get(user=request.user)
+    except Wallet.DoesNotExist:
+        money = Wallet.objects.create(user=request.user, balance = 0)
+    if request.method == 'POST':
+        form = Walletform(request.POST)
+        if form.is_valid():
+            current = form.cleaned_data['money']
+            money.balance += (current)
+            money.save()
+            return redirect('wallet')
+    else:
+        form = Walletform()
+    return render(request, 'wallet.html', {'form': form, 'wallet' : money})
 

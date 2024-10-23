@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Products
+from .models import Products, Wallet
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 
@@ -47,3 +47,9 @@ class EditListingForm(forms.ModelForm):
     class Meta:
         model = Products  # Use Products instead of Listing
         fields = ['image', 'name', 'price', 'description']
+
+class Walletform(forms.ModelForm):
+    money = forms.DecimalField(max_digits=100, decimal_places=2, widget=forms.NumberInput(attrs={'placeholder': 'Enter Amount'}))
+    class Meta:
+        model = Wallet
+        fields = []
