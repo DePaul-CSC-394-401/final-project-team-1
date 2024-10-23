@@ -23,10 +23,11 @@
         {% endif %}
     </div>
 
-    <h1>Your Listings</h1>
-    {% if listings %}
+    <!-- Current Listings Section -->
+    <h2>Current Listings</h2>
+    {% if current_listings %}
     <div class="profile-listing-grid">
-        {% for listing in listings %}
+        {% for listing in current_listings %}
         <div class="profile-listing-card">
             <img src="{{ listing.image.url }}" width="200" height="200" alt="Listing Image">
             <p><strong>{{ listing.name }}</strong> - ${{ listing.price }}</p>
@@ -48,12 +49,9 @@
             <!-- Only show edit and delete buttons if the listing belongs to the logged-in user -->
             {% if request.user == listing.user %}
             <div class="listing-buttons">
-                <!-- Link to edit listing page -->
                 <a href="{% url 'edit_listing' listing.id %}">
                     <button type="button">Edit</button>
                 </a>
-
-                <!-- Form to delete listing -->
                 <form action="{% url 'delete_listing' listing.id %}" method="POST" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit">Delete</button>
@@ -64,7 +62,32 @@
         {% endfor %}
     </div>
     {% else %}
-    <p>You have no listings yet.</p>
+    <p>You have no current listings.</p>
     {% endif %}
+
+    <!-- Sold Listings Section -->
+    <h2>Sold Listings</h2>
+    {% if sold_listings %}
+    <div class="profile-listing-grid">
+        {% for listing in sold_listings %}
+        <div class="profile-listing-card">
+            <img src="{{ listing.image.url }}" width="200" height="200" alt="Listing Image">
+            <p><strong>{{ listing.name }}</strong> - ${{ listing.price }}</p>
+            <p>{{ listing.description }}</p>
+        
+            <!-- Relist Button for Sold Listings -->
+            {% if listing.is_sold %}
+            <form action="{% url 'relist_product' listing.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Relist</button>
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>You have no sold listings.</p>
+    {% endif %}
+
 </body>
 {% endblock %}

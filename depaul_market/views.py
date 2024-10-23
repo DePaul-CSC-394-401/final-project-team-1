@@ -27,7 +27,7 @@ from datetime import timedelta
 # Index view
 def index(request):
     return render(request, 'index.html')
-
+    
 # Listings view
 def listings(request):
     query = request.GET.get('q')
@@ -35,9 +35,11 @@ def listings(request):
     price_sort = request.GET.get('price')
     date_sort = request.GET.get('date_listed')
 
-    # Only show products that are still available
+    # Only show products that are still available and not sold
     products = Products.objects.filter(
-        models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now()), on_hold=False
+      (models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now())) & 
+        models.Q(is_sold=False) &  # Filter out sold products
+        models.Q(on_hold=False)    # Filter out products that are on hold
     )
 
     if query:
@@ -164,22 +166,31 @@ def payment(request):
     if request.method == 'POST':
         cart_items = UserCart.objects.filter(user=request.user)
         wallet = get_object_or_404(Wallet, user=request.user)
-        cart_list = UserCart.objects.filter(user=request.user)
         total = 0
-        for item in cart_list:
+        for item in cart_items:
             total += item.products.price
+
         if wallet.balance >= total:
             if cart_items.exists():
-                wallet.balance-=total
+                wallet.balance -= total
                 wallet.save()
-                for items in cart_items:
-                    items.products.delete()
+
+                # Mark each product as sold
+                for item in cart_items:
+                    mark_as_sold(item.products.id)  # Call mark_as_sold function here
+                
                 cart_items.delete()
 
             messages.success(request, 'Thank you for your purchase')
         else:
-            messages.success(request, 'Not enough money, your broke')
+            messages.error(request, 'Not enough money, your broke')
     return redirect('cart')
+
+def mark_as_sold(product_id):
+    product = Products.objects.get(id=product_id)
+    product.is_sold = True
+    product.save()
+
 
 def remove(request):
     if request.method == 'POST':
@@ -191,13 +202,20 @@ def remove(request):
         return redirect('cart')
     return render (request, 'cart')
 
-
-@login_required
 def profile_settings(request):
+    # Get all listings for the current user that are not on hold
     user_listings = Products.objects.filter(user=request.user, on_hold=False)
+    
+    # Separate the listings into current and sold listings
+    current_listings = user_listings.filter(is_sold=False)  # Current active listings
+    sold_listings = user_listings.filter(is_sold=True)      # Sold listings
+
     return render(request, 'profile.html', {
-        'listings': user_listings,
+        'current_listings': current_listings,
+        'sold_listings': sold_listings,
     })
+
+
 
 def profile_management(request):
     # Existing email and password forms
@@ -299,4 +317,20 @@ def wallet(request):
     else:
         form = Walletform()
     return render(request, 'wallet.html', {'form': form, 'wallet' : money})
+
+
+def relist_product(request, product_id):
+    product = get_object_or_404(Products, id=product_id, user=request.user, is_sold=True)
+    
+    if request.method == 'POST':
+        # Mark the product as not sold anymore
+        product.is_sold = False
+        product.available_until = None  # Optionally reset the availability time or set a new time
+        product.save()
+
+        messages.success(request, f'{product.name} has been successfully relisted!')
+        return redirect('profile_settings')
+    
+    return render(request, 'profile.html')
+
 
