@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<div class="header-container">
+    <div class="nav-links">
+        <a href="{% url 'explore' %}" class="btn btn-primary">Home </a>
+    </div>
+</div>
+
+<div class="sidebar-container">
+    <div class="sidebar">
+        <p>Product Name: {{ product.name }}</p>
+        <p>Info: {{ product.description }}</p>
+        <p>Price: ${{ product.price }}</p>
+        <p>Made Available: {{ product.made_available }}</p>
+        <p>Location: {{product.user.profile.get_campus_display}}</p>
+
+        {% if product.available_until %} 
+            <p><strong>Available Until: {{ product.available_until }}</strong></p>
+        {% endif %}
+
+        <form method="POST" action="{% url 'add_to_cart' %}">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <button type="submit">Add to Cart</button>
+        </form>
+    </div>
+    <div class="image-container">
+        <img src="{{ product.image.url }}" width="700" height="700"/>
+    </div>
+</div>
+
+{% endblock %}
+

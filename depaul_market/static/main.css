@@ -55,6 +55,16 @@ body {
     overflow-y: auto;
 }
 
+/* Image Container Styling */
+.image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 75%; /* Adjust the width as needed */
+    padding: 15px;
+    margin-left: 10%;
+}
+
 /* Filter Section */
 .filter-section {
     margin-bottom: 20px;

@@ -58,6 +58,11 @@ def listings(request):
     context = {'products': products}
     return render(request, 'explore.html', context)
 
+def view_listing(request, product_id):
+    product = get_object_or_404(Products, id=product_id)
+    return render(request, 'product_detail.html', {'product': product})
+
+
 
 # Signup view
 def signup(request):
