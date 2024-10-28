@@ -4,14 +4,14 @@
 <body>
     <div class="header-container">
         <div class="nav-links">
-            <a href="{% url 'add_listing' %}"> Add a listing | </a> 
-            <a href="{% url 'profile_settings' %}">Profile |</a>
+            <a href="{% url 'add_listing' %}"> Add a listing  </a> 
+            <a href="{% url 'profile_settings' %}">Profile </a>
             <a href="{% url 'logout' %}"> Logout </a>
             <a href="{% url 'cart' %}">Cart</a>
         </div>
     </div>
 
-    <h1>Your Listings on Hold</h1>
+    <h1>Your Products on Hold</h1>
     {% if products %}
         <div class="listing-grid">
            {% for product in products %}
@@ -30,7 +30,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p>{{ user.username }} has not posted any listings yet.</p>
+            <p>{{ user.username }} has not put any products on hold yet.</p>
         {% endif %}
 
     <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore</a>

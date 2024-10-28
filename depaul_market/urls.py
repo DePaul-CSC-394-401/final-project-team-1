@@ -31,8 +31,11 @@ urlpatterns = [
     path('relist/<int:product_id>/', views.relist_product, name='relist_product'),
 
 
-    path('product_archive/<str:pk>/', views.hold_products, name='product_archive'),
+    path('product_holded/<str:pk>/', views.hold_products, name='product_holded'),
     path('hold_products/', views.hold_listings, name='hold_products'),
     path('product_restore/<str:pk>/', views.restoreProduct, name='product_restore'),
+    path('product_archived', views.archive_products, name='product_archived'),
+    path('archive_products/', views.archived_listings, name='archive_products'),
+    path('unarchive_product', views.unarchiveProduct, name='unarchive_product'),
     path('wallet', views.wallet, name='wallet')
 ]

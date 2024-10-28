@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<body>
+    <div class="header-container">
+        <div class="nav-links">
+            <a href="{% url 'add_listing' %}"> Add a listing  </a> 
+            <a href="{% url 'profile_settings' %}">Profile </a>
+            <a href="{% url 'logout' %}"> Logout </a>
+            <a href="{% url 'cart' %}">Cart</a>
+        </div>
+    </div>
+
+    <h1>Products that You Archived</h1>
+    {% if products %}
+        <div class="listing-grid">
+           {% for product in products %}
+        <!-- Listing cards will be displayed here -->
+                <div class="listing-card">
+                    <p><img src="{{ product.products.image.url }}" width="200" height="200"/></p>
+                    <p>Product Name: {{ product.products.name }}</p>
+                    <p>Info: {{ product.products.description }}</p>
+                    <p>Price: ${{ product.products.price }}</p>
+                    <p>Made Available: {{ product.products.made_available }}</p>
+                    <form method="POST" action="{% url 'unarchive_product' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="archive_id" value="{{ product.products.id }}">
+                        <button type="submit">Unarchive</button>
+                     </form>
+                </div>
+                {% empty %}
+                <h3>Currently No Products</h3>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>{{ user.username }} has not archived any products yet.</p>
+        {% endif %}
+
+    <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore</a>
+    <br>
+    <a href="{% url 'profile_settings' %}" class="btn btn-primary"> Back to Profile</a>
+</body>
+{% endblock %}
