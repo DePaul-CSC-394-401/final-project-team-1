@@ -522,6 +522,7 @@ footer p {
     justify-content: center;
     align-items: center;
     margin: 20px auto;
+    margin-bottom: 50px;
     max-width: 600px;
     padding: 10px;
     background-color: #f9f9f9;
