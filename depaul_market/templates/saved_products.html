@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <h1>Products that You Archived</h1>
+    <h1>Products that You Saved</h1>
     {% if products %}
         <div class="listing-grid">
            {% for product in products %}
@@ -19,13 +19,13 @@
                 <div class="listing-card">
                     <p><img src="{{ product.products.image.url }}" width="200" height="200"/></p>
                     <p>Product Name: {{ product.products.name }}</p>
-                    <p>Info: {{ product.products.description }}</p>
                     <p>Price: ${{ product.products.price }}</p>
                     <p>Made Available: {{ product.products.made_available }}</p>
-                    <form method="POST" action="{% url 'unarchive_product' %}">
+                    <a href="{% url 'product_detail' product.products.id %}">Details</a>
+                    <form method="POST" action="{% url 'unsave_product' %}">
                         {% csrf_token %}
-                        <input type="hidden" name="archive_id" value="{{ product.products.id }}">
-                        <button type="submit">Unarchive</button>
+                        <input type="hidden" name="saved_id" value="{{ product.products.id }}">
+                        <button type="submit">Unsave</button>
                      </form>
                 </div>
                 {% empty %}
@@ -33,7 +33,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p>{{ user.username }} has not archived any products yet.</p>
+            <p>{{ user.username }} has not saved any products yet.</p>
         {% endif %}
 
     <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore</a>

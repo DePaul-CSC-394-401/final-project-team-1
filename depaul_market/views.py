@@ -4,7 +4,7 @@ from django.contrib import messages
 from .models import Profile, Wallet
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
-from .models import Products, UserCart, archiveProducts
+from .models import Products, UserCart, saveProducts
 from .forms import ProductsForm
 from django.db import models
 from datetime import datetime
@@ -307,33 +307,33 @@ def restoreProduct(request, pk):
     return redirect('hold_products') 
 
 # View to see listings archived
-def archived_listings(request):
-    products = archiveProducts.objects.filter(user=request.user)
-    return render(request, 'archive_products.html', {'products': products})
+def saved_listings(request):
+    products = saveProducts.objects.filter(user=request.user)
+    return render(request, 'saved_products.html', {'products': products})
 
 # To archive a Product
-def archive_products(request):
+def saved_products(request):
     if request.method == 'POST': 
-        archive_id = request.POST.get('archive_id')
-        product = get_object_or_404(Products, id=archive_id)
-        listings = archiveProducts.objects.filter(user=request.user, products=product)
+        saved_id = request.POST.get('saved_id')
+        product = get_object_or_404(Products, id=saved_id)
+        listings = saveProducts.objects.filter(user=request.user, products=product)
         if not listings.exists():
-            archiveProducts.objects.create(
+            saveProducts.objects.create(
                 user=request.user,
                 products=product,
             )
         return redirect('explore')  
-    return redirect(request, 'archive_products') 
+    return redirect(request, 'saved_products') 
 
-def unarchiveProduct(request):
+def unsaveProduct(request):
     if request.method == 'POST':
-        archive_id = request.POST.get('archive_id')
-        product = get_object_or_404(Products, id=archive_id)
-        listings = archiveProducts.objects.filter(user=request.user, products=product)
+        saved_id = request.POST.get('saved_id')
+        product = get_object_or_404(Products, id=saved_id)
+        listings = saveProducts.objects.filter(user=request.user, products=product)
         if listings.exists():
             listings.delete()
-        return redirect('archive_products')
-    return redirect('archive_products') 
+        return redirect('saved_products')
+    return redirect('saved_products') 
 
 
 def wallet(request):
