@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<div class="landing-container">
+    <div class="welcome-header">Welcome to DePaul Marketplace</div>
+    <!-- Search Bar -->
+<form method="GET" action="{% url 'listings' %}" class="search-bar">
+    <input type="text" name="q" placeholder="find items..." aria-label="Search" value="{{ request.GET.q }}">
+    <button type="submit">🔍</button>
+
+</form>
+    <h2>Categories for Sale</h2>
+    <div class="category-grid">
+        
+        <!-- Furniture -->
+        <div class="category-item">
+            <img src="{% static 'icons/workspace.png' %}" alt="Furniture">
+            <p>Furniture</p>
+        </div>
+
+        <!-- Electronics -->
+        <div class="category-item">
+            <img src="{% static 'icons/electronics.png' %}" alt="Electronics">
+            <p>Electronics</p>
+        </div>
+
+        <!-- Textbooks & Study Materials -->
+        <div class="category-item">
+            <img src="{% static 'icons/textbook.png' %}" alt="Textbooks & Study Materials">
+            <p>Textbooks & Study Materials</p>
+        </div>
+
+        <!-- Clothing & Accessories -->
+        <div class="category-item">
+            <img src="{% static 'icons/tshirt.png' %}" alt="Clothing & Accessories">
+            <p>Clothing & Accessories</p>
+        </div>
+
+        <!-- Sports & Outdoor Equipment -->
+        <div class="category-item">
+            <img src="{% static 'icons/sports.png' %}" alt="Sports & Outdoor Equipment">
+            <p>Sports & Outdoor Equipment</p>
+        </div>
+
+        <!-- Appliances -->
+        <div class="category-item">
+            <img src="{% static 'icons/cutlery.png' %}" alt="Appliances">
+            <p>Appliances</p>
+        </div>
+
+        <!-- Music Instruments & Equipment -->
+        <div class="category-item">
+            <img src="{% static 'icons/musical-instrument.png' %}" alt="Music Instruments & Equipment">
+            <p>Music Instruments & Equipment</p>
+        </div>
+
+        <!-- Automotive -->
+        <div class="category-item">
+            <img src="{% static 'icons/gadgets.png' %}" alt="Automotive">
+            <p>Automotive</p>
+        </div>
+
+        <!-- Home & Kitchen -->
+        <div class="category-item">
+            <img src="{% static 'icons/miscellaneous.png' %}" alt="Home & Kitchen">
+            <p>Home & Kitchen</p>
+        </div>
+
+        <!-- Beauty & Health -->
+        <div class="category-item">
+            <img src="{% static 'icons/miscellaneous.png' %}" alt="Beauty & Health">
+            <p>Beauty & Health</p>
+        </div>
+
+        <!-- Toys & Games -->
+        <div class="category-item">
+            <img src="{% static 'icons/board-game.png' %}" alt="Toys & Games">
+            <p>Toys & Games</p>
+        </div>
+
+        <!-- Events & Tickets -->
+        <div class="category-item">
+            <img src="{% static 'icons/tickets.png' %}" alt="Events & Tickets">
+            <p>Events & Tickets</p>
+        </div>
+
+        <!-- Miscellaneous -->
+        <div class="category-item">
+            <img src="{% static 'icons/miscellaneous.png' %}" alt="Miscellaneous">
+            <p>Miscellaneous</p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

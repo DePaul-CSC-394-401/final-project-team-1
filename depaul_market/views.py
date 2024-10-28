@@ -367,4 +367,7 @@ def relist_product(request, product_id):
     
     return render(request, 'profile.html')
 
+def landing(request):
+    return render(request, 'landing.html')
+
 
