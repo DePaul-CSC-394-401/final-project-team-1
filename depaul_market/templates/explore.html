@@ -81,10 +81,10 @@
                     </form>
 
                    <!-- Archive Button -->
-                   <form action="{% url 'product_archived' %}" method="POST">
+                   <form action="{% url 'product_saved' %}" method="POST">
                         {% csrf_token %}
-                        <input type="hidden" name="archive_id" value="{{ product.id }}">
-                        <button type="submit">Archive</button>
+                        <input type="hidden" name="saved_id" value="{{ product.id }}">
+                        <button type="submit">Save</button>
                     </form>
                 </div>
             </a>

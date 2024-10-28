@@ -34,8 +34,8 @@ urlpatterns = [
     path('product_holded/<str:pk>/', views.hold_products, name='product_holded'),
     path('hold_products/', views.hold_listings, name='hold_products'),
     path('product_restore/<str:pk>/', views.restoreProduct, name='product_restore'),
-    path('product_archived', views.archive_products, name='product_archived'),
-    path('archive_products/', views.archived_listings, name='archive_products'),
-    path('unarchive_product', views.unarchiveProduct, name='unarchive_product'),
+    path('product_saved', views.saved_products, name='product_saved'),
+    path('saved_products/', views.saved_listings, name='saved_products'),
+    path('unsave_product', views.unsaveProduct, name='unsave_product'),
     path('wallet', views.wallet, name='wallet')
 ]

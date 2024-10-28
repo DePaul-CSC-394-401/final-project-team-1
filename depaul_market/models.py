@@ -24,7 +24,7 @@ class UserCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ForeignKey(Products, on_delete=models.CASCADE)
 
-class archiveProducts(models.Model):
+class saveProducts(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ForeignKey(Products,on_delete=models.CASCADE )
 
