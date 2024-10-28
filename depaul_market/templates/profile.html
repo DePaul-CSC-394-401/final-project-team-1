@@ -34,7 +34,7 @@
         <p>{{ listing.description }}</p>
 
         {% if request.user == listing.user %}
-        <form action="{% url 'product_archive' listing.id %}" method="POST">
+        <form action="{% url 'product_holded' listing.id %}" method="POST">
             {% csrf_token %}
             <button type="submit">Hold</button>
         </form>
@@ -83,6 +83,8 @@
     {% else %}
     <p>You have no sold listings.</p>
     {% endif %}
+
+    <a href="{% url 'archive_products' %}"><h2> Archived Products  </h2></a>
 
 </body>
 {% endblock %}

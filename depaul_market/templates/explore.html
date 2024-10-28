@@ -79,6 +79,13 @@
                         <input type="hidden" name="product_id" value="{{ product.id }}">
                         <button type="submit">Add to Cart</button>
                     </form>
+
+                   <!-- Archive Button -->
+                   <form action="{% url 'product_archived' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="archive_id" value="{{ product.id }}">
+                        <button type="submit">Archive</button>
+                    </form>
                 </div>
             </a>
             {% empty %}

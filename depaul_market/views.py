@@ -4,7 +4,7 @@ from django.contrib import messages
 from .models import Profile, Wallet
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
-from .models import Products, UserCart
+from .models import Products, UserCart, archiveProducts
 from .forms import ProductsForm
 from django.db import models
 from datetime import datetime
@@ -305,6 +305,35 @@ def restoreProduct(request, pk):
     listings.on_hold = False 
     listings.save()
     return redirect('hold_products') 
+
+# View to see listings archived
+def archived_listings(request):
+    products = archiveProducts.objects.filter(user=request.user)
+    return render(request, 'archive_products.html', {'products': products})
+
+# To archive a Product
+def archive_products(request):
+    if request.method == 'POST': 
+        archive_id = request.POST.get('archive_id')
+        product = get_object_or_404(Products, id=archive_id)
+        listings = archiveProducts.objects.filter(user=request.user, products=product)
+        if not listings.exists():
+            archiveProducts.objects.create(
+                user=request.user,
+                products=product,
+            )
+        return redirect('explore')  
+    return redirect(request, 'archive_products') 
+
+def unarchiveProduct(request):
+    if request.method == 'POST':
+        archive_id = request.POST.get('archive_id')
+        product = get_object_or_404(Products, id=archive_id)
+        listings = archiveProducts.objects.filter(user=request.user, products=product)
+        if listings.exists():
+            listings.delete()
+        return redirect('archive_products')
+    return redirect('archive_products') 
 
 
 def wallet(request):
