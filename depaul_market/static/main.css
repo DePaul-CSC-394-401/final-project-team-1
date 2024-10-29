@@ -117,7 +117,7 @@ button[type="submit"]:hover {
 
 /* Listing Grid */
 .listing-grid {
-    width: 75%;
+    width: 100%;
     padding: 10px;
     display: flex;
     flex-wrap: wrap;
@@ -127,11 +127,11 @@ button[type="submit"]:hover {
 
 /* Listing Cards */
 .listing-card {
-    width: 250px;
+    width: 300px;
     padding: 10px;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     text-align: center;
     transition: transform 0.2s ease;
     height: 400px; /* Set a fixed height for consistency */
@@ -627,4 +627,3 @@ footer p {
         height: 60px;
     }
 }
-
