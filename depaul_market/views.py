@@ -99,7 +99,7 @@ def userlogin(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('explore')
+            return redirect('landing')
         else:
             messages.error(request, "Invalid login credentials.")
     return render(request, 'login.html')
@@ -366,5 +366,8 @@ def relist_product(request, product_id):
         return redirect('profile_settings')
     
     return render(request, 'profile.html')
+
+def landing(request):
+    return render(request, 'landing.html')
 
 
