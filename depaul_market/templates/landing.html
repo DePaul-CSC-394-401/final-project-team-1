@@ -2,6 +2,17 @@
 {% load static %}
 
 {% block head %}
+
+<div class="header-container">
+    <div class="nav-links">
+        <a href="{% url 'add_listing' %}"> Add a listing  </a> 
+        <a href="{% url 'profile_settings' %}">Profile </a>
+        <a href="{% url 'hold_products' %}"> Hold Products  </a>
+        <a href="{% url 'logout' %}"> Logout </a> 
+        <a href="{% url 'cart' %}">Cart</a>
+        <a href="{% url 'wallet' %}">Wallet</a>
+    </div>
+</div>
 <div class="landing-container">
     <div class="welcome-header">Welcome to DePaul Marketplace</div>
     <!-- Search Bar -->
