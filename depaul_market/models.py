@@ -2,6 +2,21 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
 
+# Categories for products
+CATEGORY_CHOICES = [
+    ('furniture', 'Furniture'),
+    ('electronics', 'Electronics'),
+    ('textbooks', 'Textbooks & Study Materials'),
+    ('clothing', 'Clothing & Accessories'),
+    ('sports', 'Sports & Outdoor Equipment'),
+    ('music', 'Music Instruments & Equipment'),
+    ('appliances', 'Appliances'),
+    ('home_kitchen', 'Home & Kitchen'),
+    ('games', 'Games'),
+    ('events', 'Events & Tickets'),
+    ('miscellaneous', 'Miscellaneous'),
+]
+
 class Products(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(null=False, blank=False)
@@ -13,6 +28,7 @@ class Products(models.Model):
     available_until = models.DateTimeField(null=True, blank=True)  # This field can be null if no duration is provided
     is_sold = models.BooleanField(default=False)  # New field to track sold status
     on_hold = models.BooleanField(default=False)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)  # Category field added
     def __str__(self):
         return self.name
     
