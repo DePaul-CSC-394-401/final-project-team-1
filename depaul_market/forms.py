@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Products, Wallet
+from .models import CATEGORY_CHOICES, Products, Wallet
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 
@@ -12,6 +12,7 @@ from .models import Products
 
 class ProductsForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Give Item a Name'}))
+    category = forms.ChoiceField(choices=CATEGORY_CHOICES, label="Category", required=True)  # Dropdown for category
     
     # Add availability duration field (optional)
     availability_duration = forms.IntegerField(
@@ -22,7 +23,7 @@ class ProductsForm(forms.ModelForm):
 
     class Meta:
         model = Products  # Specify the model here
-        fields = ['image', 'name', 'price', 'description', 'availability_duration']  # Include all the necessary fields
+        fields = ['image', 'name', 'price', 'description', 'availability_duration','category']  # Include all the necessary fields
 
 
 # New form for updating email

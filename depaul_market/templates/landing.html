@@ -2,101 +2,98 @@
 {% load static %}
 
 {% block head %}
-
 <div class="header-container">
     <div class="nav-links">
-        <a href="{% url 'add_listing' %}"> Add a listing  </a> 
-        <a href="{% url 'profile_settings' %}">Profile </a>
-        <a href="{% url 'hold_products' %}"> Hold Products  </a>
-        <a href="{% url 'logout' %}"> Logout </a> 
+        <a href="{% url 'add_listing' %}">Add a listing</a>
+        <a href="{% url 'profile_settings' %}">Profile</a>
+        <a href="{% url 'hold_products' %}">Hold Products</a>
+        <a href="{% url 'logout' %}">Logout</a>
         <a href="{% url 'cart' %}">Cart</a>
         <a href="{% url 'wallet' %}">Wallet</a>
     </div>
 </div>
+
 <div class="landing-container">
     <div class="welcome-header">Welcome to DePaul Marketplace</div>
-    <!-- Search Bar -->
-<form method="GET" action="{% url 'listings' %}" class="search-bar">
-    <input type="text" name="q" placeholder="find items..." aria-label="Search" value="{{ request.GET.q }}">
-    <button type="submit">🔍</button>
-
-</form>
+    <form method="GET" action="{% url 'listings' %}" class="search-bar">
+        <input type="text" name="q" placeholder="find items..." aria-label="Search" value="{{ request.GET.q }}">
+        <button type="submit">🔍</button>
+    </form>
     <h2>Shop by Category or view all listings</h2>
     <div class="category-grid">
-        
+        <!-- View All links to full listings without any category filter -->
         <div class="category-item">
-            <a href="{% url 'explore' %}">
+            <a href="{% url 'listings' %}">
                 <img src="{% static 'icons/view-All.png' %}" alt="View All">
                 <p>View All</p>
             </a>
         </div>
-
-        <!-- Furniture -->
         <div class="category-item">
-            <img src="{% static 'icons/workspace.png' %}" alt="Furniture">
-            <p>Furniture</p>
+            <a href="{% url 'listings' %}?category=furniture">
+                <img src="{% static 'icons/workspace.png' %}" alt="Furniture">
+                <p>Furniture</p>
+            </a>
         </div>
-
-        <!-- Electronics -->
         <div class="category-item">
-            <img src="{% static 'icons/electronics.png' %}" alt="Electronics">
-            <p>Electronics</p>
+            <a href="{% url 'listings' %}?category=electronics">
+                <img src="{% static 'icons/electronics.png' %}" alt="Electronics">
+                <p>Electronics</p>
+            </a>
         </div>
-
-        <!-- Textbooks & Study Materials -->
         <div class="category-item">
-            <img src="{% static 'icons/textbook.png' %}" alt="Textbooks & Study Materials">
-            <p>Textbooks & Study Materials</p>
+            <a href="{% url 'listings' %}?category=textbooks">
+                <img src="{% static 'icons/textbook.png' %}" alt="Textbooks & Study Materials">
+                <p>Textbooks & Study Materials</p>
+            </a>
         </div>
-
-        <!-- Clothing & Accessories -->
         <div class="category-item">
-            <img src="{% static 'icons/tshirt.png' %}" alt="Clothing & Accessories">
-            <p>Clothing & Accessories</p>
+            <a href="{% url 'listings' %}?category=clothing">
+                <img src="{% static 'icons/tshirt.png' %}" alt="Clothing & Accessories">
+                <p>Clothing & Accessories</p>
+            </a>
         </div>
-
-        <!-- Sports & Outdoor Equipment -->
         <div class="category-item">
-            <img src="{% static 'icons/sports.png' %}" alt="Sports & Outdoor Equipment">
-            <p>Sports & Outdoor Equipment</p>
+            <a href="{% url 'listings' %}?category=sports">
+                <img src="{% static 'icons/sports.png' %}" alt="Sports & Outdoor Equipment">
+                <p>Sports & Outdoor Equipment</p>
+            </a>
         </div>
-
-        <!-- Music Instruments & Equipment -->
         <div class="category-item">
-            <img src="{% static 'icons/musical-instrument.png' %}" alt="Music Instruments & Equipment">
-            <p>Music Instruments & Equipment</p>
+            <a href="{% url 'listings' %}?category=music">
+                <img src="{% static 'icons/musical-instrument.png' %}" alt="Music Instruments & Equipment">
+                <p>Music Instruments & Equipment</p>
+            </a>
         </div>
-
-        <!-- Appliances -->
         <div class="category-item">
-            <img src="{% static 'icons/gadgets.png' %}" alt="Appliances">
-            <p>Appliances</p>
+            <a href="{% url 'listings' %}?category=appliances">
+                <img src="{% static 'icons/gadgets.png' %}" alt="Appliances">
+                <p>Appliances</p>
+            </a>
         </div>
-
-        <!-- Home & Kitchen -->
         <div class="category-item">
-            <img src="{% static 'icons/cutlery.png' %}" alt="Home & Kitchen">
-            <p>Home & Kitchen</p>
+            <a href="{% url 'listings' %}?category=home_kitchen">
+                <img src="{% static 'icons/cutlery.png' %}" alt="Home & Kitchen">
+                <p>Home & Kitchen</p>
+            </a>
         </div>
-
-        <!--Games -->
         <div class="category-item">
-            <img src="{% static 'icons/board-game.png' %}" alt="Games">
-            <p>Games</p>
+            <a href="{% url 'listings' %}?category=games">
+                <img src="{% static 'icons/board-game.png' %}" alt="Games">
+                <p>Games</p>
+            </a>
         </div>
-
-        <!-- Events & Tickets -->
         <div class="category-item">
-            <img src="{% static 'icons/tickets.png' %}" alt="Events & Tickets">
-            <p>Events & Tickets</p>
+            <a href="{% url 'listings' %}?category=events">
+                <img src="{% static 'icons/tickets.png' %}" alt="Events & Tickets">
+                <p>Events & Tickets</p>
+            </a>
         </div>
-
-        <!-- Miscellaneous -->
         <div class="category-item">
-            <img src="{% static 'icons/miscellaneous.png' %}" alt="Miscellaneous">
-            <p>Miscellaneous</p>
+            <a href="{% url 'listings' %}?category=miscellaneous">
+                <img src="{% static 'icons/miscellaneous.png' %}" alt="Miscellaneous">
+                <p>Miscellaneous</p>
+            </a>
         </div>
-
     </div>
 </div>
 {% endblock %}
