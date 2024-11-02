@@ -34,6 +34,7 @@ def listings(request):
     location = request.GET.get('location')
     price_sort = request.GET.get('price')
     date_sort = request.GET.get('date_listed')
+    category = request.GET.get('category')
 
     # Only show products that are still available and not sold
     products = Products.objects.filter(
@@ -54,6 +55,8 @@ def listings(request):
         products = products.order_by('-made_available')
     elif date_sort == 'oldest':
         products = products.order_by('made_available')
+    if category:  # Filter by category if provided
+        products = products.filter(category=category)
 
     context = {'products': products}
     return render(request, 'explore.html', context)
@@ -109,18 +112,19 @@ def addProduct(request):
     if request.method == 'POST':
         form = ProductsForm(request.POST, request.FILES)
         if form.is_valid():
-            product = form.save(commit=False)
+            product = form.save(commit=False)  # Create a product instance but don't save to the database yet
             product.user = request.user
 
             # Handle availability duration
-            duration = request.POST.get('availability_duration')  # Get availability duration
-            if duration:  # If a duration was set
-                hours = int(duration)
-                product.available_until = datetime.now() + timedelta(hours=hours)  # Set available_until
+            duration = form.cleaned_data.get('availability_duration')  
+            if duration:  # If a duration was provided
+                product.available_until = datetime.now() + timedelta(hours=duration)  
 
-            product.save()
+            product.category = form.cleaned_data.get('category')  
+            product.save()  
+
             return redirect('/explore')
-    
+        
     context = {'ProductsForm': form}
     return render(request, 'add_listing.html', context)
 
