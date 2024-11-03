@@ -257,6 +257,7 @@ def profile_management(request):
         if 'update_profile' in request.POST:
             profile_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
             if profile_form.is_valid():
+                profile_form.campus = profile_form.cleaned_data.get('campus')
                 profile_form.save()
                 messages.success(request, 'Your profile introduction was successfully updated!')
                 return redirect('profile_management')

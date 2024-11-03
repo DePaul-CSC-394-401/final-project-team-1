@@ -38,7 +38,7 @@ class EmailUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile  # Use the Profile model
-        fields = ['introduction']  # Only include the introduction field
+        fields = ['introduction', 'campus']  # Only include the introduction and location field
         widgets = {
             'introduction': forms.Textarea(attrs={'placeholder': 'Tell us about yourself...'})
         }
