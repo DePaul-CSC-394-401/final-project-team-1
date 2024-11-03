@@ -38,5 +38,6 @@ urlpatterns = [
     path('product_saved', views.saved_products, name='product_saved'),
     path('saved_products/', views.saved_listings, name='saved_products'),
     path('unsave_product', views.unsaveProduct, name='unsave_product'),
-    path('wallet', views.wallet, name='wallet')
+    path('wallet', views.wallet, name='wallet'),
+    path('about', views.about, name='about')
 ]

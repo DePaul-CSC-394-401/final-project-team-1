@@ -6,7 +6,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 from .models import Products, Profile  # Add Profile here
 
-from .models import Products 
+from .models import Products, UserReviews
 
 # Existing ProductsForm
 
@@ -54,3 +54,12 @@ class Walletform(forms.ModelForm):
     class Meta:
         model = Wallet
         fields = []
+        
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = UserReviews
+        fields = ['leavereview']
+        widgets = {
+            'leavereview': forms.Textarea(attrs={'placeholder': 'Write a review'})
+        }
+        
