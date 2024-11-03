@@ -20,6 +20,18 @@
             <p><strong>Available Until: {{ product.available_until }}</strong></p>
         {% endif %}
 
+        {% if product.color %} 
+            <p>Color(s): {{ product.color }}</p>
+        {% endif %}
+
+        {% if product.quality %} 
+            <p>Condition: {{ product.quality }}</p>
+        {% endif %}
+
+        {% if product.brand %} 
+            <p>Brand(s): {{ product.brand }}</p>
+        {% endif %}
+
         <form method="POST" action="{% url 'add_to_cart' %}">
             {% csrf_token %}
             <input type="hidden" name="product_id" value="{{ product.id }}">

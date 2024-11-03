@@ -121,6 +121,7 @@ def addProduct(request):
                 product.available_until = datetime.now() + timedelta(hours=duration)  
 
             product.category = form.cleaned_data.get('category')  
+            product.quality = form.cleaned_data.get('quality')
             product.save()  
 
             return redirect('/explore')

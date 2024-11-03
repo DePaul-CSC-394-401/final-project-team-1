@@ -23,7 +23,7 @@ class ProductsForm(forms.ModelForm):
 
     class Meta:
         model = Products  # Specify the model here
-        fields = ['image', 'name', 'price', 'description', 'availability_duration','category']  # Include all the necessary fields
+        fields = ['image', 'name', 'price', 'description', 'availability_duration','category', 'quality', 'brand', 'color']  # Include all the necessary fields
 
 
 # New form for updating email

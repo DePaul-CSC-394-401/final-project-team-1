@@ -17,6 +17,12 @@ CATEGORY_CHOICES = [
     ('miscellaneous', 'Miscellaneous'),
 ]
 
+QUALITY_CHOICES = [
+    ('new', 'New'),
+    ('used', 'Used'),
+    ('refurbished', 'Refurbished')
+]
+
 class Products(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(null=False, blank=False)
@@ -24,6 +30,10 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     description = models.TextField(blank=True, null=True)
     made_available = models.DateTimeField(auto_now=True)
+    quality = models.CharField(max_length=20, choices=QUALITY_CHOICES, blank=True, null=True)
+    brand = models.CharField(max_length=100, blank=True, null=True)
+    color = models.CharField(max_length=100, blank=True, null=True)
+
 
     available_until = models.DateTimeField(null=True, blank=True)  # This field can be null if no duration is provided
     is_sold = models.BooleanField(default=False)  # New field to track sold status
@@ -55,8 +65,18 @@ class Profile(models.Model):
         ('graduate', 'Graduate')
     ])
     campus = models.CharField(max_length=50, choices=[
+        ('loop', 'Loop'), # Loop Campuses
+        ('business', 'College of Business'),
+        ('law', 'College of Law'),
+        ('professional_studies', 'School of Continuing and Professional Studies'),
+        ('communication', 'College of Communication'),
+        ('cdm', 'College of Computing and Digital Media'),
         ('lincoln_park', 'Lincoln Park'),
-        ('loop', 'Loop')
+        ('education', 'College of Education'), # Lincoln Campuses
+        ('arts_social', 'College of Liberal Arts and Social Sciences'),
+        ('science_health', 'College of Science and Health'),
+        ('music', 'School of Music'),
+        ('theatre', 'Theatre School')
     ])
     graduating = models.BooleanField(default=False)
     
