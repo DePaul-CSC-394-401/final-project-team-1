@@ -22,6 +22,10 @@ from datetime import timedelta  # Add this at the top of the file
 
 from datetime import timedelta
 
+from django.core.mail import send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.core.mail import BadHeaderError
 
 
 # Index view
@@ -171,7 +175,7 @@ def view_cart(request):
         total += item.products.price
     context = {'cart_list': cart_list, 'total': total}
     return render(request, 'cart.html', context)
-
+'''
 def payment(request):
     if request.method == 'POST':
         cart_items = UserCart.objects.filter(user=request.user)
@@ -194,6 +198,55 @@ def payment(request):
             messages.success(request, 'Thank you for your purchase')
         else:
             messages.error(request, 'Not enough money, your broke')
+    return redirect('cart')
+'''
+def payment(request):
+    if request.method == 'POST':
+        cart_items = UserCart.objects.filter(user=request.user)
+        wallet = get_object_or_404(Wallet, user=request.user)
+        total = sum(item.products.price for item in cart_items)
+
+        if wallet.balance >= total:
+            if cart_items.exists():
+                wallet.balance -= total
+                wallet.save()
+
+                for item in cart_items:
+                    product = item.products
+                    mark_as_sold(product.id)
+
+                    # Notify the seller
+                    send_purchase_confirmation(
+                        seller_email=product.user.email,
+                        listing_title=product.name,
+                        buyer_name=request.user.username
+                    )
+
+                    # Email content for buyer
+                    buyer_subject = 'Order Confirmation'
+                    buyer_message = render_to_string('emails/buyer_confirmation.html', {
+                        'buyer_name': request.user.username,
+                        'product': product,
+                        'total': total,
+                    })
+
+                    # Send confirmation email to the buyer
+                    send_mail(
+                        buyer_subject,
+                        buyer_message,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [request.user.email],
+                        fail_silently=False,
+                    )
+
+                cart_items.delete()
+
+                messages.success(request, 'Thank you for your purchase!')
+            else:
+                messages.error(request, 'Your cart is empty.')
+        else:
+            messages.error(request, 'Not enough money, please add more funds to your wallet.')
+
     return redirect('cart')
 
 def mark_as_sold(product_id):
@@ -409,3 +462,21 @@ def landing(request):
     
 def about(request):
     return render (request, 'about.html')
+
+def send_purchase_confirmation(seller_email, listing_title, buyer_name):
+    try:
+        seller_subject = f'Your listing "{listing_title}" has been purchased!'
+        seller_message = render_to_string('emails/seller_notification.html', {
+            'listing_title': listing_title,
+            'buyer_name': buyer_name,
+        })
+
+        send_mail(
+            seller_subject,
+            seller_message,
+            settings.DEFAULT_FROM_EMAIL,
+            [seller_email],
+            fail_silently=False,
+        )
+    except BadHeaderError:
+        print("Invalid header found.")
