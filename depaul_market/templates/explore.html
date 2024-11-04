@@ -7,10 +7,10 @@
             <a href="{% url 'add_listing' %}"> Add a listing  </a> 
             <a href="{% url 'profile_settings' %}">Profile </a>
             <a href="{% url 'hold_products' %}"> Hold Products  </a>
-            <a href="{% url 'logout' %}"> Logout </a> 
             <a href="{% url 'cart' %}">Cart</a>
             <a href="{% url 'wallet' %}">Wallet</a>
             <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'logout' %}"> Logout </a> 
         </div>
     </div>
     
@@ -21,38 +21,27 @@
                 <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
                 <button type="submit">Search</button>
 
-                <!-- Location Filter -->
-                <div class="filter-section">
-                    <label for="location">Location:</label>
-                    <div class="dropdown">
-                        <input type="radio" id="the_loop" name="location" value="loop">
-                        <label for="the_loop">The Loop</label>
-                        <input type="radio" id="lincoln_park" name="location" value="lincoln_park">
-                        <label for="lincoln_park">Lincoln Park</label><br>
-                    </div>
-                </div>
-                
-                <!-- Price Filter -->
-                <div class="filter-section">
-                    <label for="price">Sort by Price:</label>
-                    <div class="dropdown">
-                        <input type="radio" id="min" name="price" value="min">
-                        <label for="min">Lowest first</label><br>
-                        <input type="radio" id="max" name="price" value="max">
-                        <label for="max">Highest first</label>
-                    </div>
-                </div>
-                
-                <!-- Date Listed Filter -->
-                <div class="filter-section">
-                    <label for="date_listed">Date Listed:</label>
-                    <div class="dropdown">
-                        <input type="radio" id="newest" name="date_listed" value="newest">
-                        <label for="newest">Newest</label><br>
-                        <input type="radio" id="oldest" name="date_listed" value="oldest">
-                        <label for="oldest">Oldest</label>
-                    </div>
-                </div>
+    <!-- Location Filter -->
+    <div class="filter-section">
+        <label for="location">Location:</label>
+        <a href="?location=loop">The Loop</a>
+        <a href="?location=lincoln_park">Lincoln Park</a>
+    </div>
+
+    <!-- Price Filter -->
+    <div class="filter-section">
+        <label for="price">Sort by Price:</label>
+        <a href="?price=min">Lowest first</a>
+        <a href="?price=max">Highest first</a>
+    </div>
+
+    <!-- Date Listed Filter -->
+    <div class="filter-section">
+        <label for="date_listed">Date Listed:</label>
+        <a href="?date_listed=newest">Newest</a>
+        <a href="?date_listed=oldest">Oldest</a>
+    </div>
+
             </form>
         </div>
 
@@ -63,8 +52,8 @@
             <a href="{% url 'product_detail' product.id %}" class="listing-card-link">
                 <div class="listing-card">
                     <p><img src="{{ product.image.url }}" width="200" height="200"/></p>
-                    <p>Product Name: {{ product.name }}</p>
-                    <p>Location: {{product.user.profile.get_campus_display}}</p>
+                    <p> {{ product.name }}</p>
+                    <p> {{product.user.profile.get_campus_display}}</p>
         
                     <!-- Display product availability if set -->
                     {% if product.available_until %} 
