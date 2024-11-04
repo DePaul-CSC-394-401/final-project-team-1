@@ -175,31 +175,7 @@ def view_cart(request):
         total += item.products.price
     context = {'cart_list': cart_list, 'total': total}
     return render(request, 'cart.html', context)
-'''
-def payment(request):
-    if request.method == 'POST':
-        cart_items = UserCart.objects.filter(user=request.user)
-        wallet = get_object_or_404(Wallet, user=request.user)
-        total = 0
-        for item in cart_items:
-            total += item.products.price
 
-        if wallet.balance >= total:
-            if cart_items.exists():
-                wallet.balance -= total
-                wallet.save()
-
-                # Mark each product as sold
-                for item in cart_items:
-                    mark_as_sold(item.products.id)  # Call mark_as_sold function here
-                
-                cart_items.delete()
-
-            messages.success(request, 'Thank you for your purchase')
-        else:
-            messages.error(request, 'Not enough money, your broke')
-    return redirect('cart')
-'''
 def payment(request):
     if request.method == 'POST':
         cart_items = UserCart.objects.filter(user=request.user)
@@ -230,14 +206,18 @@ def payment(request):
                         'total': total,
                     })
 
-                    # Send confirmation email to the buyer
-                    send_mail(
-                        buyer_subject,
-                        buyer_message,
-                        settings.DEFAULT_FROM_EMAIL,
-                        [request.user.email],
-                        fail_silently=False,
-                    )
+                    try:
+                        # Send confirmation email to the buyer with HTML content
+                        send_mail(
+                            buyer_subject,
+                            '',  # Leave the plain text message empty or add a simple fallback if needed
+                            settings.DEFAULT_FROM_EMAIL,
+                            [request.user.email],
+                            fail_silently=False,
+                            html_message=buyer_message  # This ensures the email is rendered as HTML
+                        )
+                    except BadHeaderError:
+                        print("Invalid header found.")
 
                 cart_items.delete()
 
@@ -457,12 +437,9 @@ def relist_product(request, product_id):
 def landing(request):
     return render(request, 'landing.html')
 
-
-
-    
 def about(request):
     return render (request, 'about.html')
-
+'''
 def send_purchase_confirmation(seller_email, listing_title, buyer_name):
     try:
         seller_subject = f'Your listing "{listing_title}" has been purchased!'
@@ -477,6 +454,29 @@ def send_purchase_confirmation(seller_email, listing_title, buyer_name):
             settings.DEFAULT_FROM_EMAIL,
             [seller_email],
             fail_silently=False,
+        )
+    except BadHeaderError:
+        print("Invalid header found.")
+'''
+
+def send_purchase_confirmation(seller_email, listing_title, buyer_name):
+    try:
+        seller_subject = f'Your listing "{listing_title}" has been purchased!'
+        
+        # Render the HTML content for the email
+        seller_message = render_to_string('emails/seller_notification.html', {
+            'listing_title': listing_title,
+            'buyer_name': buyer_name,
+        })
+
+        # Send the email with the rendered HTML content
+        send_mail(
+            seller_subject,
+            '',  # Leave the plain text message empty or include a simple fallback message
+            settings.DEFAULT_FROM_EMAIL,
+            [seller_email],
+            fail_silently=False,
+            html_message=seller_message  # This ensures the email is rendered as HTML
         )
     except BadHeaderError:
         print("Invalid header found.")

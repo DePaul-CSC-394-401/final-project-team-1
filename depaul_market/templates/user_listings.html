@@ -25,14 +25,19 @@
                 <p><strong>{{ listing.name }}</strong> - ${{ listing.price }}</p>
                 <p>{{ listing.description }}</p>
                 <img src="{{ listing.image.url }}" width="200" height="200" alt="Listing Image">
+                
+                <!-- Add to Cart Form -->
+                <form method="post" action="{% url 'add_to_cart' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ listing.id }}">
+                    <button type="submit" class="btn btn-success">Add to Cart</button>
+                </form>
             </li>
         {% endfor %}
         </ul>
     {% else %}
         <p>{{ user.username }} has not posted any listings yet.</p>
     {% endif %}
-
-    
 
     <h2>Reviews for {{ user.username }}</h2>
     {% if reviews %}
@@ -45,8 +50,7 @@
         <p>No reviews for this user.</p>
     {% endif %}
 
-
-
+    <!-- Review Form -->
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
