@@ -4,7 +4,7 @@ from django.contrib import messages
 from .models import Profile, Wallet
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
-from .models import Products, UserCart, saveProducts
+from .models import Products, UserCart, saveProducts, UserReviews
 from .forms import ProductsForm
 from django.db import models
 from datetime import datetime
@@ -15,7 +15,7 @@ from django.shortcuts import render, redirect
 from .forms import EmailUpdateForm  
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import EditListingForm, Walletform
+from .forms import EditListingForm, Walletform, ReviewForm
 from .forms import EmailUpdateForm, ProfileUpdateForm  # Add ProfileUpdateForm
 
 from datetime import timedelta  # Add this at the top of the file
@@ -278,7 +278,23 @@ def delete_listing(request, id):
 def user_listings(request, user_id):
     user = get_object_or_404(User, id=user_id)
     listings = Products.objects.filter(user=user)
-    return render(request, 'user_listings.html', {'user': user, 'listings': listings})
+    reviews = UserReviews.objects.filter(user2 = user)
+    form = ReviewForm()
+    seller = get_object_or_404(User, id = user_id)
+    reviews = UserReviews.objects.filter(user2 = seller)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.user2 = seller
+            review.save()
+            
+        else:
+            form = ReviewForm()
+        
+    return render(request, 'user_listings.html', {'user': user, 'listings': listings, 'reviews' : reviews, 'form':form, 'seller':seller})
+
 
 
 def edit_listing(request, listing_id):
@@ -377,3 +393,7 @@ def landing(request):
     return render(request, 'landing.html')
 
 
+
+    
+def about(request):
+    return render (request, 'about.html')

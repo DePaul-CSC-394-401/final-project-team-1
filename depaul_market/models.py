@@ -92,3 +92,11 @@ class Wallet(models.Model):
     
     def __str__(self):
         return self.balance
+    
+class UserReviews(models.Model):
+    user = models.ForeignKey(User,related_name='buyer', on_delete=models.CASCADE)
+    user2 = models.ForeignKey(User,related_name='seller', on_delete=models.CASCADE)
+    leavereview = models.TextField()
+    
+    def __str__(self):
+        return self.leavereview

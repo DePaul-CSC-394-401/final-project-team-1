@@ -33,5 +33,24 @@
     {% endif %}
 
     
+
+    <h2>Reviews for {{ user.username }}</h2>
+    {% if reviews %}
+        <ul>
+            {% for review in reviews %}
+                <li>{{ review.user.username }} posted: {{ review.leavereview }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No reviews for this user.</p>
+    {% endif %}
+
+
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create</button>
+    </form>
 </body>
 {% endblock %}
