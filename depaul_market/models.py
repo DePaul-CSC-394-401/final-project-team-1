@@ -54,6 +54,9 @@ class saveProducts(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ForeignKey(Products,on_delete=models.CASCADE )
 
+class Class(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
 # Profile model to store additional student info
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -79,6 +82,8 @@ class Profile(models.Model):
         ('theatre', 'Theatre School')
     ])
     graduating = models.BooleanField(default=False)
+
+    classes = models.ManyToManyField(Class)
     
     # Add this field to store the user's self-written introduction
     introduction = models.TextField(null=True, blank=True)

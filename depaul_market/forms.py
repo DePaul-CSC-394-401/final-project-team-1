@@ -43,6 +43,14 @@ class ProfileUpdateForm(forms.ModelForm):
             'introduction': forms.Textarea(attrs={'placeholder': 'Tell us about yourself...'})
         }
 
+class ClassForm(forms.Form):
+    class_name = forms.CharField(max_length=100)
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['classes']
+
 
 class EditListingForm(forms.ModelForm):
     class Meta:

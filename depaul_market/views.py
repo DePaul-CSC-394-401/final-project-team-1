@@ -4,8 +4,8 @@ from django.contrib import messages
 from .models import Profile, Wallet
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
-from .models import Products, UserCart, saveProducts, UserReviews
-from .forms import ProductsForm
+from .models import Products, UserCart, saveProducts, UserReviews, Class
+from .forms import ClassForm, ProductsForm
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.forms import PasswordChangeForm
@@ -234,6 +234,7 @@ def profile_management(request):
 
     # New profile form for introduction
     profile_form = ProfileUpdateForm(instance=request.user.profile)
+    class_form = ClassForm()  # Initialize class_form for GET requests
 
     if request.method == 'POST':
         # Handle Email Update
@@ -261,11 +262,22 @@ def profile_management(request):
                 profile_form.save()
                 messages.success(request, 'Your profile introduction was successfully updated!')
                 return redirect('profile_management')
+            
+        # Handle Class Addition
+        if 'class_add' in request.POST:
+            class_form = ClassForm(request.POST)
+            if class_form.is_valid():
+                class_name = class_form.cleaned_data['class_name']
+                class_obj, created = Class.objects.get_or_create(name=class_name)
+                profile = Profile.objects.get(user=request.user)
+                profile.classes.add(class_obj)
+                return redirect('profile_management')
 
     return render(request, 'profile_management.html', {
         'email_form': email_form,
         'password_form': password_form,
         'profile_form': profile_form,  # Pass the new profile form
+        'class_form': class_form,  # Ensure class_form is always passed to the template
     })
 
 def delete_listing(request, id):
