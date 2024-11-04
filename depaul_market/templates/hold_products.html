@@ -4,6 +4,7 @@
 <body>
     <div class="header-container">
         <div class="nav-links">
+            <a href="{% url 'explore' %}" class="btn btn-primary">Home </a>
             <a href="{% url 'add_listing' %}"> Add a listing  </a> 
             <a href="{% url 'profile_settings' %}">Profile </a>
             <a href="{% url 'logout' %}"> Logout </a>
@@ -32,7 +33,5 @@
         {% else %}
             <p>{{ user.username }} has not put any products on hold yet.</p>
         {% endif %}
-
-    <a href="{% url 'explore' %}" class="btn btn-primary">Back to Explore</a>
 </body>
 {% endblock %}
