@@ -23,7 +23,7 @@ class ProductsForm(forms.ModelForm):
 
     class Meta:
         model = Products  # Specify the model here
-        fields = ['image', 'name', 'price', 'description', 'availability_duration','category', 'quality', 'brand', 'color']  # Include all the necessary fields
+        fields = ['image', 'name', 'price', 'description', 'availability_duration','category', 'quality', 'brand', 'color', 'contact_info']  # Include all the necessary fields
 
 
 # New form for updating email
@@ -55,7 +55,7 @@ class ProfileForm(forms.ModelForm):
 class EditListingForm(forms.ModelForm):
     class Meta:
         model = Products  # Use Products instead of Listing
-        fields = ['image', 'name', 'price', 'description']
+        fields = ['image', 'name', 'price', 'description', 'color', 'quality', 'brand', 'contact_info']
 
 class Walletform(forms.ModelForm):
     money = forms.DecimalField(max_digits=100, decimal_places=2, widget=forms.NumberInput(attrs={'placeholder': 'Enter Amount'}))

@@ -33,6 +33,7 @@ class Products(models.Model):
     quality = models.CharField(max_length=20, choices=QUALITY_CHOICES, blank=True, null=True)
     brand = models.CharField(max_length=100, blank=True, null=True)
     color = models.CharField(max_length=100, blank=True, null=True)
+    contact_info = models.CharField(max_length=100, blank=True, null=True)
 
 
     available_until = models.DateTimeField(null=True, blank=True)  # This field can be null if no duration is provided
