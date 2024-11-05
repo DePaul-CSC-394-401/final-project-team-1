@@ -32,6 +32,17 @@
             <p>Brand(s): {{ product.brand }}</p>
         {% endif %}
 
+        {% if product.associated_classes %}
+            <p>Associated Classes: </p>
+            <ul>
+                {% for class in product.associated_classes.all %}
+                    <li>{{ class.name }}</li>
+                {% empty %}
+                    <li>No Associated Classes</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         <form method="POST" action="{% url 'add_to_cart' %}">
             {% csrf_token %}
             <input type="hidden" name="product_id" value="{{ product.id }}">

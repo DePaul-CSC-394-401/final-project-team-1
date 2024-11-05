@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import CATEGORY_CHOICES, Products, Wallet
+from .models import CATEGORY_CHOICES, Products, Wallet, Class
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 
@@ -21,9 +21,15 @@ class ProductsForm(forms.ModelForm):
         label="Availability Duration (hours)"
     )
 
+    associated_classes = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'Enter classes separated by commas'})
+    )
+
     class Meta:
         model = Products  # Specify the model here
-        fields = ['image', 'name', 'price', 'description', 'availability_duration','category', 'quality', 'brand', 'color']  # Include all the necessary fields
+        fields = ['image', 'name', 'price', 'description', 'availability_duration','category', 'quality', 'brand', 'color', 'associated_classes']  # Include all the necessary fields
 
 
 # New form for updating email

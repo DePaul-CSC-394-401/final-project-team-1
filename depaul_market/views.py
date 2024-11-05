@@ -111,45 +111,31 @@ def userlogin(request):
             messages.error(request, "Invalid login credentials.")
     return render(request, 'login.html')
 
-def addProduct(request):
-    form = ProductsForm()
-    if request.method == 'POST':
-        form = ProductsForm(request.POST, request.FILES)
-        if form.is_valid():
-            product = form.save(commit=False)  # Create a product instance but don't save to the database yet
-            product.user = request.user
 
-            # Handle availability duration
-            duration = form.cleaned_data.get('availability_duration')  
-            if duration:  # If a duration was provided
-                product.available_until = datetime.now() + timedelta(hours=duration)  
-
-            product.category = form.cleaned_data.get('category')  
-            product.quality = form.cleaned_data.get('quality')
-            product.save()  
-
-            return redirect('/explore')
-        
-    context = {'ProductsForm': form}
-    return render(request, 'add_listing.html', context)
 
 def addProduct(request):
     form = ProductsForm()
     if request.method == 'POST':
         form = ProductsForm(request.POST, request.FILES)
         if form.is_valid():
-            product = form.save(commit=False) 
+            product = form.save(commit=False)
             product.user = request.user
             
-            # Capture availability duration from the form (it will be in hours or days, for example)
             availability_duration = form.cleaned_data.get('availability_duration', None)
-            
             if availability_duration:
-                # Calculate the available_until time by adding the duration to the current time
                 product.available_until = datetime.now() + timedelta(hours=availability_duration)
             
-            product.save()  # Save the product with the available_until field
-        return redirect('/explore')
+            product.save()
+            
+            # Process associated classes
+            class_names = form.cleaned_data['associated_classes']
+            if class_names:
+                class_names_list = [name.strip() for name in class_names.split(',')]
+                for class_name in class_names_list:
+                    class_obj, created = Class.objects.get_or_create(name=class_name)
+                    product.associated_classes.add(class_obj)
+            
+            return redirect('/explore')
     
     context = {'ProductsForm': form}
     return render(request, 'add_listing.html', context)

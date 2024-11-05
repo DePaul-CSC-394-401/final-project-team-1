@@ -23,6 +23,9 @@ QUALITY_CHOICES = [
     ('refurbished', 'Refurbished')
 ]
 
+class Class(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
 class Products(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(null=False, blank=False)
@@ -39,6 +42,7 @@ class Products(models.Model):
     is_sold = models.BooleanField(default=False)  # New field to track sold status
     on_hold = models.BooleanField(default=False)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)  # Category field added
+    associated_classes = models.ManyToManyField(Class)
     def __str__(self):
         return self.name
     
@@ -53,9 +57,6 @@ class UserCart(models.Model):
 class saveProducts(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ForeignKey(Products,on_delete=models.CASCADE )
-
-class Class(models.Model):
-    name = models.CharField(max_length=100, unique=True)
 
 # Profile model to store additional student info
 class Profile(models.Model):
