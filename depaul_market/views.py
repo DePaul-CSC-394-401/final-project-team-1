@@ -344,6 +344,7 @@ def edit_listing(request, listing_id):
     if request.method == 'POST':
         form = ProductsForm(request.POST, request.FILES, instance=listing)
         if form.is_valid():
+            form.quality = form.cleaned_data.get('quality')
             form.save()
             return redirect('profile_settings')
     else:

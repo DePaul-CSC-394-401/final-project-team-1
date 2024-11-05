@@ -10,26 +10,30 @@
 
 <div class="sidebar-container">
     <div class="sidebar">
-        <p>Product Name: {{ product.name }}</p>
-        <p>Info: {{ product.description }}</p>
-        <p>Price: ${{ product.price }}</p>
-        <p>Made Available: {{ product.made_available }}</p>
-        <p>Location: {{product.user.profile.get_campus_display}}</p>
+        <p><strong>Product Name: </strong>{{ product.name }}</p>
+        <p>{{ product.description }}</p>
+        <p><strong>Price: </strong>${{ product.price }}</p>
+        <p><strong>Made Available: </strong>{{ product.made_available }}</p>
+        <p><strong>Location: </strong>{{product.user.profile.get_campus_display}}</p>
 
         {% if product.available_until %} 
             <p><strong>Available Until: {{ product.available_until }}</strong></p>
         {% endif %}
 
         {% if product.color %} 
-            <p>Color(s): {{ product.color }}</p>
+            <p><strong>Color(s): </strong>{{ product.color }}</p>
         {% endif %}
 
         {% if product.quality %} 
-            <p>Condition: {{ product.quality }}</p>
+            <p><strong>Condition: </strong>{{ product.quality }}</p>
         {% endif %}
 
         {% if product.brand %} 
-            <p>Brand(s): {{ product.brand }}</p>
+            <p><strong>Brand(s): </strong>{{ product.brand }}</p>
+        {% endif %}
+
+        {% if product.contact_info %} 
+            <p>{{ product.contact_info }}</p>
         {% endif %}
 
         {% if product.associated_classes %}
