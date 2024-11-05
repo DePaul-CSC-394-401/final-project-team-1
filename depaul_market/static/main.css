@@ -667,3 +667,29 @@ footer p {
     box-sizing: border-box; /* Ensure padding and border are included in the width */
 }
 
+.aboutpage {
+    font-family: 'Times New Roman', Times, serif;
+
+}
+
+.aboutpage p{
+    text-align: center;
+    font-size: large;
+    box-sizing: border-box;
+    width: 70%;
+    margin: 0% auto;
+}
+
+.aboutpage h3{
+    text-align: center;
+    font-size: x-large;
+    font-style: italic;
+    color: #1E4D9B;
+}
+
+.aboutpage h1{
+    text-align: center;
+    font-size: xx-large;
+    font-style: italic;
+    color: #1E4D9B;
+}
