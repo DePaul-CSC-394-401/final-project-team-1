@@ -39,10 +39,11 @@ def listings(request):
     price_sort = request.GET.get('price')
     date_sort = request.GET.get('date_listed')
     category = request.GET.get('category')
+    class_swap = request.GET.get('class_swap')
 
     # Only show products that are still available and not sold
     products = Products.objects.filter(
-      (models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now())) & 
+        (models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now())) & 
         models.Q(is_sold=False) &  # Filter out sold products
         models.Q(on_hold=False)    # Filter out products that are on hold
     )
@@ -59,8 +60,18 @@ def listings(request):
         products = products.order_by('-made_available')
     elif date_sort == 'oldest':
         products = products.order_by('made_available')
-    if category:  # Filter by category if provided
+    if category:
         products = products.filter(category=category)
+    
+    if class_swap:
+        user_profile = Profile.objects.get(user=request.user)
+        user_classes = user_profile.classes.all()
+        print(f"User classes: {user_classes}")  # Debug print
+        if user_classes.exists():
+            products = products.filter(associated_classes__in=user_classes).distinct()
+            print(f"Filtered products: {products}")  # Debug print
+        else:
+            products = Products.objects.none()  # No products if user has no classes
 
     context = {'products': products}
     return render(request, 'explore.html', context)
