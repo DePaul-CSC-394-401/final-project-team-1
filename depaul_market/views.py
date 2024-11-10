@@ -98,6 +98,24 @@ def signup(request):
                 user = User.objects.create_user(username=username, email=email, password=password)
                 profile = Profile(user=user, year=year, campus=campus, graduating=graduating)
                 profile.save()
+                
+                # Send Welcome Email
+                subject = 'Welcome to DePaul Marketplace!'
+                message = render_to_string('emails/welcome_email.html', {
+                    'username': user.username,
+                })
+                try:
+                    send_mail(
+                        subject,
+                        '',  # Plain text message (optional)
+                        settings.DEFAULT_FROM_EMAIL,
+                        [user.email],
+                        fail_silently=False,
+                        html_message=message,  # HTML message content
+                    )
+                except BadHeaderError:
+                    print("Invalid header found.")
+
                 messages.success(request, 'Account created successfully! Please log in.')
                 return redirect('userlogin')
             except IntegrityError:

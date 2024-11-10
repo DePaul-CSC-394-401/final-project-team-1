@@ -2,11 +2,42 @@
 <html>
 <head>
     <title>Listing Sold Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1E4D9B; /* DePaul Blue */
+            font-size: 24px;
+            margin-top: 0;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-    <p>Hello,</p>
-    <p>Your listing "{{ listing_title }}" has been purchased by {{ buyer_name }}.</p>
-    <p>Thank you for using our marketplace!</p>
-    <p>- The Marketplace Team</p>
+    <div class="container">
+        <h1>Your Listing Has Been Sold!</h1>
+        <p>Hello,</p>
+        <p>Your listing "<strong>{{ listing_title }}</strong>" has been purchased by {{ buyer_name }}.</p>
+        <p>Thank you for using our marketplace!</p>
+        <p>Best regards,<br>The Marketplace Team</p>
+    </div>
 </body>
 </html>
