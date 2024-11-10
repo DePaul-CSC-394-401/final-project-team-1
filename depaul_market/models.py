@@ -36,13 +36,12 @@ class Products(models.Model):
     quality = models.CharField(max_length=20, choices=QUALITY_CHOICES, blank=True, null=True)
     brand = models.CharField(max_length=100, blank=True, null=True)
     color = models.CharField(max_length=100, blank=True, null=True)
-
-
     available_until = models.DateTimeField(null=True, blank=True)  # This field can be null if no duration is provided
     is_sold = models.BooleanField(default=False)  # New field to track sold status
     on_hold = models.BooleanField(default=False)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)  # Category field added
     associated_classes = models.ManyToManyField(Class)
+    is_senior_firesale = models.BooleanField(default=False)
     def __str__(self):
         return self.name
     

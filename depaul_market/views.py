@@ -40,6 +40,7 @@ def listings(request):
     date_sort = request.GET.get('date_listed')
     category = request.GET.get('category')
     class_swap = request.GET.get('class_swap')
+    senior_firesale = request.GET.get('senior_firesale')
 
     # Only show products that are still available and not sold
     products = Products.objects.filter(
@@ -72,6 +73,9 @@ def listings(request):
             print(f"Filtered products: {products}")  # Debug print
         else:
             products = Products.objects.none()  # No products if user has no classes
+    
+    if senior_firesale:
+        products = products.filter(is_senior_firesale=True)
 
     context = {'products': products}
     return render(request, 'explore.html', context)
@@ -150,25 +154,30 @@ def addProduct(request):
             product = form.save(commit=False)
             product.user = request.user
             
-            availability_duration = form.cleaned_data.get('availability_duration', None)
-            if availability_duration:
-                product.available_until = datetime.now() + timedelta(hours=availability_duration)
-            
-            product.save()
-            
-            # Process associated classes
-            class_names = form.cleaned_data['associated_classes']
-            if class_names:
-                class_names_list = [name.strip() for name in class_names.split(',')]
-                for class_name in class_names_list:
-                    class_obj, created = Class.objects.get_or_create(name=class_name)
-                    product.associated_classes.add(class_obj)
-            
-            return redirect('/explore')
+            # Check if the user is graduating
+            user_profile = Profile.objects.get(user=request.user)
+            if form.cleaned_data['is_senior_firesale'] and not user_profile.graduating:
+                form.add_error('is_senior_firesale', 'Only graduating students can add products to the senior firesale.')
+                messages.error(request, 'Only graduating students can add products to the senior firesale.')
+            else:
+                availability_duration = form.cleaned_data.get('availability_duration', None)
+                if availability_duration:
+                    product.available_until = datetime.now() + timedelta(hours=availability_duration)
+                
+                product.save()
+                
+                # Process associated classes
+                class_names = form.cleaned_data['associated_classes']
+                if class_names:
+                    class_names_list = [name.strip() for name in class_names.split(',')]
+                    for class_name in class_names_list:
+                        class_obj, created = Class.objects.get_or_create(name=class_name)
+                        product.associated_classes.add(class_obj)
+                
+                return redirect('/explore')
     
     context = {'ProductsForm': form}
     return render(request, 'add_listing.html', context)
-
 
 def add_to_cart(request):
     if request.method == 'POST':
