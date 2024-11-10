@@ -40,6 +40,7 @@ def listings(request):
     date_sort = request.GET.get('date_listed')
     category = request.GET.get('category')
     class_swap = request.GET.get('class_swap')
+    senior_firesale = request.GET.get('senior_firesale')
 
     # Only show products that are still available and not sold
     products = Products.objects.filter(
@@ -72,6 +73,9 @@ def listings(request):
             print(f"Filtered products: {products}")  # Debug print
         else:
             products = Products.objects.none()  # No products if user has no classes
+    
+    if senior_firesale:
+        products = products.filter(is_senior_firesale=True)
 
     context = {'products': products}
     return render(request, 'explore.html', context)

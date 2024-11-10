@@ -27,9 +27,15 @@ class ProductsForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'placeholder': 'Enter classes separated by commas'})
     )
 
+    is_senior_firesale = forms.BooleanField(
+        required=False,  # Optional field
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        label="Senior Firesale"
+    )
+
     class Meta:
         model = Products  # Specify the model here
-        fields = ['image', 'name', 'price', 'description', 'availability_duration','category', 'quality', 'brand', 'color', 'associated_classes']  # Include all the necessary fields
+        fields = ['image', 'name', 'price', 'description', 'availability_duration','category', 'quality', 'brand', 'color', 'associated_classes', 'is_senior_firesale']  # Include all the necessary fields
 
 
 # New form for updating email
