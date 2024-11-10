@@ -44,6 +44,17 @@
         <ul>
             {% for review in reviews %}
                 <li>{{ review.user.username }} posted: {{ review.leavereview }}</li>
+                {% if review.user == request.user %}
+                <form method="post" action="{% url 'deletereview' review_id=review.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+                <form method="post" action="{% url 'editreview' review_id=review.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Editt</button>
+                </form>
+                
+                {% endif %}
             {% endfor %}
         </ul>
     {% else %}
@@ -51,10 +62,12 @@
     {% endif %}
 
     <!-- Review Form -->
-    <form method="post">
+    <form method="post" action="{% url 'user_listings' user_id=user.id %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Create</button>
     </form>
 </body>
+
+
 {% endblock %}
