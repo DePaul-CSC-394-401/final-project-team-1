@@ -59,9 +59,18 @@
             <a href="{% url 'product_detail' product.id %}" class="listing-card-link">
                 <div class="listing-card">
                     <p><img src="{{ product.image.url }}" width="200" height="200"/></p>
+                    {% if product.is_senior_firesale %}
+                        <p><strong>!SENIOR FIRESALE!</strong></p>
+                        <p>${{product.price}}</p>
+                    {% endif %}
+
+                    {% if not product.is_senior_firesale %}
+                        <p> ${{product.price}}</p>
+                    {% endif %}
+
                     <p> {{ product.name }}</p>
                     <p> {{product.user.profile.get_campus_display}}</p>
-        
+                    
                     <!-- Display product availability if set -->
                     {% if product.available_until %} 
                         <p><strong>Available Until: {{ product.available_until }}</strong></p>
