@@ -215,49 +215,75 @@ button[type="submit"]:hover {
 }
 
 /* Auth Container (Login/Signup) */
+
+.logo-container {
+   align-items: center;
+   margin: 100px auto 100px auto;
+    text-align: center;
+}
+.logo-image {
+    align-items: center;
+    
+}
 .auth-container {
     background-color: #1E4D9B;
     color: white;
     width: 400px;
     padding: 30px;
     border-radius: 15px;
-    margin: 100px auto;
+    margin: 100px auto 100px auto; /* Add more top margin for logo space */
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
 }
 
 .auth-container h2 {
     margin-bottom: 20px;
     color: #FFFFFF;
+    font-size: 1.8em;
+    font-weight: bold;
 }
 
+/* Form Group - Input Labels and Fields */
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: black;
+    display:inline-block;
+    padding-top: 10px;
+    margin-bottom: 8px;
+    color: #FFFFFF; /* Change label color to white */
+    font-weight: bold;
+    font-size: 0.9em;
 }
 
 .form-group input {
     width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: none;
-    border-radius: 5px;
+    padding: 12px;
+    margin: 8px 0 16px;
+    border: 1px solid #CCCCCC;
+    border-radius: 8px;
+    background-color: #F0F0F0;
+    font-size: 0.95em;
+}
+.form-group-campus {
+    padding-top: 30px;
+    padding-bottom: 30px;
 }
 
+/* Button Styling */
 .auth-btn {
     width: 100%;
-    padding: 10px;
-    background-color: #CC0000;
+    padding: 12px;
+    background-color: #4A90E2; /* Lighter blue for the button */
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
     margin-top: 15px;
 }
 
 .auth-btn:hover {
-    background-color: #1E4D9B;
+    background-color: #357ABD; /* Darker shade on hover */
 }
 
 /* Profile Page */
@@ -667,3 +693,29 @@ footer p {
     box-sizing: border-box; /* Ensure padding and border are included in the width */
 }
 
+.aboutpage {
+    font-family: 'Times New Roman', Times, serif;
+
+}
+
+.aboutpage p{
+    text-align: center;
+    font-size: large;
+    box-sizing: border-box;
+    width: 70%;
+    margin: 0% auto;
+}
+
+.aboutpage h3{
+    text-align: center;
+    font-size: x-large;
+    font-style: italic;
+    color: #1E4D9B;
+}
+
+.aboutpage h1{
+    text-align: center;
+    font-size: xx-large;
+    font-style: italic;
+    color: #1E4D9B;
+}

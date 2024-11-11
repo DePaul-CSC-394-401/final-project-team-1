@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import CATEGORY_CHOICES, Products, Wallet
+from .models import CATEGORY_CHOICES, Products, Wallet, Class
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 
@@ -21,9 +21,21 @@ class ProductsForm(forms.ModelForm):
         label="Availability Duration (hours)"
     )
 
+    associated_classes = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'Enter classes separated by commas'})
+    )
+
+    is_senior_firesale = forms.BooleanField(
+        required=False,  # Optional field
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        label="Senior Firesale"
+    )
+
     class Meta:
         model = Products  # Specify the model here
-        fields = ['image', 'name', 'price', 'description', 'availability_duration','category', 'quality', 'brand', 'color', 'contact_info']  # Include all the necessary fields
+        fields = ['image', 'name', 'price', 'description', 'availability_duration','category', 'quality', 'brand', 'color', 'associated_classes', 'is_senior_firesale']  # Include all the necessary fields
 
 
 # New form for updating email

@@ -39,10 +39,12 @@ def listings(request):
     price_sort = request.GET.get('price')
     date_sort = request.GET.get('date_listed')
     category = request.GET.get('category')
+    class_swap = request.GET.get('class_swap')
+    senior_firesale = request.GET.get('senior_firesale')
 
     # Only show products that are still available and not sold
     products = Products.objects.filter(
-      (models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now())) & 
+        (models.Q(available_until__isnull=True) | models.Q(available_until__gt=datetime.now())) & 
         models.Q(is_sold=False) &  # Filter out sold products
         models.Q(on_hold=False)    # Filter out products that are on hold
     )
@@ -59,8 +61,21 @@ def listings(request):
         products = products.order_by('-made_available')
     elif date_sort == 'oldest':
         products = products.order_by('made_available')
-    if category:  # Filter by category if provided
+    if category:
         products = products.filter(category=category)
+    
+    if class_swap:
+        user_profile = Profile.objects.get(user=request.user)
+        user_classes = user_profile.classes.all()
+        print(f"User classes: {user_classes}")  # Debug print
+        if user_classes.exists():
+            products = products.filter(associated_classes__in=user_classes).distinct()
+            print(f"Filtered products: {products}")  # Debug print
+        else:
+            products = Products.objects.none()  # No products if user has no classes
+    
+    if senior_firesale:
+        products = products.filter(is_senior_firesale=True)
 
     context = {'products': products}
     return render(request, 'explore.html', context)
@@ -87,6 +102,24 @@ def signup(request):
                 user = User.objects.create_user(username=username, email=email, password=password)
                 profile = Profile(user=user, year=year, campus=campus, graduating=graduating)
                 profile.save()
+                
+                # Send Welcome Email
+                subject = 'Welcome to DePaul Marketplace!'
+                message = render_to_string('emails/welcome_email.html', {
+                    'username': user.username,
+                })
+                try:
+                    send_mail(
+                        subject,
+                        '',  # Plain text message (optional)
+                        settings.DEFAULT_FROM_EMAIL,
+                        [user.email],
+                        fail_silently=False,
+                        html_message=message,  # HTML message content
+                    )
+                except BadHeaderError:
+                    print("Invalid header found.")
+
                 messages.success(request, 'Account created successfully! Please log in.')
                 return redirect('userlogin')
             except IntegrityError:
@@ -111,49 +144,40 @@ def userlogin(request):
             messages.error(request, "Invalid login credentials.")
     return render(request, 'login.html')
 
-def addProduct(request):
-    form = ProductsForm()
-    if request.method == 'POST':
-        form = ProductsForm(request.POST, request.FILES)
-        if form.is_valid():
-            product = form.save(commit=False)  # Create a product instance but don't save to the database yet
-            product.user = request.user
 
-            # Handle availability duration
-            duration = form.cleaned_data.get('availability_duration')  
-            if duration:  # If a duration was provided
-                product.available_until = datetime.now() + timedelta(hours=duration)  
-
-            product.category = form.cleaned_data.get('category')  
-            product.quality = form.cleaned_data.get('quality')
-            product.save()  
-
-            return redirect('/explore')
-        
-    context = {'ProductsForm': form}
-    return render(request, 'add_listing.html', context)
 
 def addProduct(request):
     form = ProductsForm()
     if request.method == 'POST':
         form = ProductsForm(request.POST, request.FILES)
         if form.is_valid():
-            product = form.save(commit=False) 
+            product = form.save(commit=False)
             product.user = request.user
             
-            # Capture availability duration from the form (it will be in hours or days, for example)
-            availability_duration = form.cleaned_data.get('availability_duration', None)
-            
-            if availability_duration:
-                # Calculate the available_until time by adding the duration to the current time
-                product.available_until = datetime.now() + timedelta(hours=availability_duration)
-            
-            product.save()  # Save the product with the available_until field
-        return redirect('/explore')
+            # Check if the user is graduating
+            user_profile = Profile.objects.get(user=request.user)
+            if form.cleaned_data['is_senior_firesale'] and not user_profile.graduating:
+                form.add_error('is_senior_firesale', 'Only graduating students can add products to the senior firesale.')
+                messages.error(request, 'Only graduating students can add products to the senior firesale.')
+            else:
+                availability_duration = form.cleaned_data.get('availability_duration', None)
+                if availability_duration:
+                    product.available_until = datetime.now() + timedelta(hours=availability_duration)
+                
+                product.save()
+                
+                # Process associated classes
+                class_names = form.cleaned_data['associated_classes']
+                if class_names:
+                    class_names_list = [name.strip() for name in class_names.split(',')]
+                    for class_name in class_names_list:
+                        class_obj, created = Class.objects.get_or_create(name=class_name)
+                        product.associated_classes.add(class_obj)
+                
+                return redirect('/explore')
     
     context = {'ProductsForm': form}
     return render(request, 'add_listing.html', context)
-
 
 def add_to_cart(request):
     if request.method == 'POST':
