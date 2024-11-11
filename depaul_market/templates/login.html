@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block head %}
+<div class="logo-container">
+    <img src="{% static 'icons/DP-logo.png' %}" alt="DePaul Marketplace Logo" class="logo-image">
+</div>
+
 <div class="auth-container">
-    <h2>Login</h2>
 
     {% if messages %}
     <ul class="messages">
@@ -10,7 +14,7 @@
             <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
     </ul>
-{% endif %}
+    {% endif %}
 
     <form method="POST" action="{% url 'userlogin' %}">
         {% csrf_token %}
