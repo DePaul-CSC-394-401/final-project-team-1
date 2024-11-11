@@ -41,6 +41,7 @@ def listings(request):
     category = request.GET.get('category')
     class_swap = request.GET.get('class_swap')
     senior_firesale = request.GET.get('senior_firesale')
+    conditions = request.GET.get('condition')
 
     # Only show products that are still available and not sold
     products = Products.objects.filter(
@@ -50,7 +51,7 @@ def listings(request):
     )
 
     if query:
-        products = products.filter(name__icontains=query)
+        products = products.filter(name__icontains=query) | products.filter(description__icontains=query)
     if location:
         products = products.filter(user__profile__campus=location)
     if price_sort == 'min':
@@ -76,6 +77,9 @@ def listings(request):
     
     if senior_firesale:
         products = products.filter(is_senior_firesale=True)
+    
+    if conditions:
+        products = products.filter(quality=conditions)
 
     context = {'products': products}
     return render(request, 'explore.html', context)
