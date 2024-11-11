@@ -67,7 +67,7 @@ class ProfileForm(forms.ModelForm):
 class EditListingForm(forms.ModelForm):
     class Meta:
         model = Products  # Use Products instead of Listing
-        fields = ['image', 'name', 'price', 'description', 'color', 'quality', 'brand', 'contact_info']
+        fields = ['image', 'name', 'price', 'description', 'color', 'quality', 'brand']
 
 class Walletform(forms.ModelForm):
     money = forms.DecimalField(max_digits=100, decimal_places=2, widget=forms.NumberInput(attrs={'placeholder': 'Enter Amount'}))
