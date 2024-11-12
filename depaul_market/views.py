@@ -368,15 +368,58 @@ def user_listings(request, user_id):
 
 
 def edit_listing(request, listing_id):
+    # Retrieve the listing object, ensuring it belongs to the current user
     listing = get_object_or_404(Products, id=listing_id, user=request.user)
+    
     if request.method == 'POST':
         form = ProductsForm(request.POST, request.FILES, instance=listing)
+        
         if form.is_valid():
-            form.quality = form.cleaned_data.get('quality')
-            form.save()
-            return redirect('profile_settings')
+            try:
+                # Save the main fields
+                listing = form.save(commit=False)
+                
+                # Handle availability duration if provided
+                availability_duration = form.cleaned_data.get('availability_duration')
+                if availability_duration:
+                    listing.available_until = datetime.now() + timedelta(hours=availability_duration)
+                else:
+                    listing.available_until = None  # Clear if no duration is specified
+
+                # Save the listing to the database
+                listing.save()
+
+                # Handle `associated_classes` ManyToManyField separately
+                associated_classes_str = form.cleaned_data['associated_classes']
+                if associated_classes_str:
+                    # Split the comma-separated classes and strip whitespace
+                    class_names = [name.strip() for name in associated_classes_str.split(',')]
+                    class_objs = []
+                    for class_name in class_names:
+                        # Find or create each Class
+                        class_obj, created = Class.objects.get_or_create(name=class_name)
+                        class_objs.append(class_obj)
+                    # Set the `ManyToManyField` with the list of Class objects
+                    listing.associated_classes.set(class_objs)
+                else:
+                    listing.associated_classes.clear()  # Clear if no classes provided
+
+                # Redirect to profile settings after successful save
+                return redirect('profile_settings')
+
+            except Exception as e:
+                # Capture any exceptions and print the traceback
+                print("Exception occurred:", e)
+                traceback.print_exc()
+                # Optional: pass an error message to the template
+                return render(request, 'edit_listing.html', {'form': form, 'error': "An error occurred while saving."})
+        else:
+            # Print form errors if any for debugging
+            print("Form errors:", form.errors)
     else:
+        # Initialize the form with the listing instance
         form = ProductsForm(instance=listing)
+    
     return render(request, 'edit_listing.html', {'form': form})
 
 # View to see listings on hold
