@@ -753,3 +753,8 @@ footer p {
     font-style: italic;
     color: #1E4D9B;
 }
+
+.uploadreviews {
+    border: 1px solid white;
+    padding: 15px;
+}
