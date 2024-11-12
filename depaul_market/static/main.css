@@ -270,7 +270,7 @@ button[type="submit"]:hover {
     display:inline-block;
     padding-top: 10px;
     margin-bottom: 8px;
-    color: #FFFFFF; /* Change label color to white */
+    color: #000000; /* Change label color to white */
     font-weight: bold;
     font-size: 0.9em;
 }
