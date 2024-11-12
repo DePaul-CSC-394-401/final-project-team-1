@@ -83,8 +83,13 @@
                         <img src="{{ product.image.url }}" alt="{{ product.name }}" class="listing-image"/>
             
                         <!-- Title and Location -->
-                        <p class="listing-title">{{ product.name }}</p>
-                        <p class="listing-location">{{ product.user.profile.get_campus_display }}</p>
+                        <div class="listing-title-location">
+                            <p class="listing-title">{{ product.name }}</p>
+                            <p class="listing-location">{{ product.user.profile.get_campus_display }}</p>
+                        </div>
+
+                        <!-- Link to the user's profile with all their listings -->
+                        <a class="listing-user" href="{% url 'user_listings' product.user.id %}" > {{ product.user.username }} </a>
             
                         <!-- Action Buttons -->
                         <div class="listing-actions">

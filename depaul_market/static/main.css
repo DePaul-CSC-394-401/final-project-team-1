@@ -60,22 +60,30 @@ body {
 }
 
 
-/* Sidebar Container */
 .sidebar-container {
     display: flex;
+    height: 100vh; /* Ensure the container takes up the full viewport height */
+    overflow: hidden; /* Prevent the sidebar from scrolling */
 }
 
-/* Sidebar Styling */
 .sidebar {
     width: 15%;
     padding: 15px;
     background-color: #003f87; /* DePaul Blue background */
     color: white; /* White text for better contrast */
     border-right: 1px solid #ccc;
-    position: sticky;
+    position: relative;
     top: 0;
-    height: 100vh;
-    overflow-y: auto;
+    height: 100%; /* Ensure the sidebar takes up the full height of the container */
+    overflow-y: auto; /* Allow the sidebar to scroll if its content overflows */
+    flex-shrink: 0; /* Prevent the sidebar from shrinking */
+}
+
+.content-container {
+    flex-grow: 1; /* Allow the content container to take up the remaining space */
+    padding: 15px;
+    overflow-y: auto; /* Make the content container scrollable */
+    height: 100%; /* Ensure the content container takes up the full height of the container */
 }
 
 /* Image Container Styling */
@@ -209,6 +217,24 @@ button[type="submit"]:hover {
     color: #2980b9; /* Link color similar to example */
     margin-right: 100px;
     margin-bottom: 15px;
+}
+
+.listing-title-location {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.listing-title, .listing-location {
+    margin: 0;
+}
+
+.listing-user {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #2980b9; /* Link color similar to example */
+    margin-right: 250px;
 }
 
 /* Button Styling for Actions */
