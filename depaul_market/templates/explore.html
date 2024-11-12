@@ -4,8 +4,8 @@
 <body>
     <div class="header-container">
         <div class="nav-links">
-            <a href="{% url 'add_listing' %}"> Add a listing  </a> 
-            <a href="{% url 'hold_products' %}"> Hold Products  </a>
+            <a href="{% url 'add_listing' %}">Add a listing</a> 
+            <a href="{% url 'hold_products' %}">Hold Products</a>
             <a href="{% url 'cart' %}">Cart</a>
             <a href="{% url 'wallet' %}">Wallet</a>
             <a href="{% url 'about' %}">About</a> 
@@ -16,92 +16,96 @@
         </div>
     </div>
     
-
     <div class="sidebar-container">
         <div class="sidebar">
-
-            <div class="button-row">
-                <div class="class-swap">
-                    <button type="submit", name="class_swap" value="true">Class Swap</button>
-                </div>
-        
-                <div class="senior-firesale">
-                    <button type="submit" name="senior_firesale" value="true">Senior Firesale</button>
-                </div>
-            </div>
-
-    <!-- Location Filter -->
-    <div class="filter-section">
-        <label for="location">Location:</label>
-        <a href="?location=loop">The Loop</a>
-        <a href="?location=lincoln_park">Lincoln Park</a>
-    </div>
-
-    <!-- Price Filter -->
-    <div class="filter-section">
-        <label for="price">Sort by Price:</label>
-        <a href="?price=min">Lowest first</a>
-        <a href="?price=max">Highest first</a>
-    </div>
-
-    <!-- Date Listed Filter -->
-    <div class="filter-section">
-        <label for="date_listed">Date Listed:</label>
-        <a href="?date_listed=newest">Newest</a>
-        <a href="?date_listed=oldest">Oldest</a>
-    </div>
-
-    <!-- Condition Listed Filter -->
-    <div class="filter-section">
-        <label for="condition">Current Condition:</label>
-        <a href="?condition=new">New</a>
-        <a href="?condition=used">Used</a>
-        <a href="?condition=refurbished">Refurbished</a>
-    </div>
-            </form>
-    </div>
-
-    <div class="content-container">
-        <form method="GET" action="{% url 'listings' %}" class="search-bar">
-            <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
-            <button type="submit">&#x1F50D;</button>
-        </form>
-
-        <!-- listing-->
-        <div class="listing-grid">
-            {% for product in products %}
-            <a href="{% url 'product_detail' product.id %}" class="listing-card-link">
-                <div class="listing-card">
-                    <!-- Price -->
-                    <p class="listing-price">${{ product.price }}</p>
-        
-                    <!-- Image -->
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="listing-image"/>
-        
-                    <!-- Title and Description -->
-                    <p class="listing-title">{{ product.name }}</p>
-                    <p class="listing-location">{{ product.user.profile.get_campus_display }}</p>
-        
-                    <!-- Action Buttons -->
-                    <div class="listing-actions">
-                        <form method="POST" action="{% url 'add_to_cart' %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="product_id" value="{{ product.id }}">
-                            <button type="submit" class="action-button">Add to Cart</button>
-                        </form>
-                        <form method="POST" action="{% url 'product_saved' %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="saved_id" value="{{ product.id }}">
-                            <button type="submit" class="action-button">Save</button>
-                        </form>
+            <form method="GET" action="{% url 'listings' %}">
+                <div class="button-row">
+                    <div class="class-swap">
+                        <button type="submit" name="class_swap" value="true">Class Swap</button>
+                    </div>
+            
+                    <div class="senior-firesale">
+                        <button type="submit" name="senior_firesale" value="true">Senior Firesale</button>
                     </div>
                 </div>
-            </a>
-            {% empty %}
-            <h3>Currently No Products</h3>
-            {% endfor %}
-        </div>        
+
+                <!-- Location Filter -->
+                <div class="filter-section">
+                    <label for="location">Location:</label>
+                    <a href="?location=loop">The Loop</a>
+                    <a href="?location=lincoln_park">Lincoln Park</a>
+                </div>
+
+                <!-- Price Filter -->
+                <div class="filter-section">
+                    <label for="price">Sort by Price:</label>
+                    <a href="?price=min">Lowest first</a>
+                    <a href="?price=max">Highest first</a>
+                </div>
+
+                <!-- Date Listed Filter -->
+                <div class="filter-section">
+                    <label for="date_listed">Date Listed:</label>
+                    <a href="?date_listed=newest">Newest</a>
+                    <a href="?date_listed=oldest">Oldest</a>
+                </div>
+
+                <!-- Condition Filter -->
+                <div class="filter-section">
+                    <label for="condition">Current Condition:</label>
+                    <a href="?condition=new">New</a>
+                    <a href="?condition=used">Used</a>
+                    <a href="?condition=refurbished">Refurbished</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="content-container">
+            <form method="GET" action="{% url 'listings' %}" class="search-bar">
+                <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+                <button type="submit">&#x1F50D;</button>
+            </form>
+
+            <!-- Listings -->
+            <div class="listing-grid">
+                {% for product in products %}
+                <a href="{% url 'product_detail' product.id %}" class="listing-card-link">
+                    <div class="listing-card">
+                        <!-- Senior Firesale Label -->
+                        {% if product.is_senior_firesale %}
+                            <p><strong>!SENIOR FIRESALE!</strong></p>
+                        {% endif %}
+                        
+                        <!-- Price -->
+                        <p class="listing-price">${{ product.price }}</p>
+            
+                        <!-- Image -->
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="listing-image"/>
+            
+                        <!-- Title and Location -->
+                        <p class="listing-title">{{ product.name }}</p>
+                        <p class="listing-location">{{ product.user.profile.get_campus_display }}</p>
+            
+                        <!-- Action Buttons -->
+                        <div class="listing-actions">
+                            <form method="POST" action="{% url 'add_to_cart' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <button type="submit" class="action-button">Add to Cart</button>
+                            </form>
+                            <form method="POST" action="{% url 'product_saved' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="saved_id" value="{{ product.id }}">
+                                <button type="submit" class="action-button">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <h3>Currently No Products</h3>
+                {% endfor %}
+            </div>        
+        </div>
     </div>
-</div>
 </body>
 {% endblock %}

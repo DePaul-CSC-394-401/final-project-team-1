@@ -23,7 +23,7 @@ body {
     align-items: center;
     padding: 12px 20px;
     background-color: #1E4D9B; /* DePaul Blue */
-    border-radius: 8px;
+    border-radius: 0;
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-top: 4px solid #CC0000; /* Red top border */
@@ -194,19 +194,20 @@ button[type="submit"]:hover {
 
 /* Title Styling */
 .listing-title {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-weight: bold;
-    font-size: 1.1em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 400;
+    font-size: 25px;
     color: #2980b9; /* Link color similar to example */
     margin-right: 250px;
 }
 
 /* Location Styling */
 .listing-location {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-weight: 600;
-    font-size: 1.1em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 400;
+    font-size: 20px;
     color: #2980b9; /* Link color similar to example */
+    margin-right: 100px;
     margin-bottom: 15px;
 }
 
@@ -251,7 +252,7 @@ button[type="submit"]:hover {
     width: 400px;
     padding: 30px;
     padding-right: 50px;
-    border-radius: 15px;
+    border-radius: 0;
     margin: 100px auto 100px auto; /* Add more top margin for logo space */
     text-align: center;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
@@ -269,7 +270,7 @@ button[type="submit"]:hover {
     display:inline-block;
     padding-top: 10px;
     margin-bottom: 8px;
-    color: #FFFFFF; /* Change label color to white */
+    color: #000000; /* Change label color to white */
     font-weight: bold;
     font-size: 0.9em;
 }
