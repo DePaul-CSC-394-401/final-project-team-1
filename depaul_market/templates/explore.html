@@ -67,38 +67,40 @@
             <button type="submit">&#x1F50D;</button>
         </form>
 
-        <!-- Listings Grid -->
+        <!-- listing-->
         <div class="listing-grid">
             {% for product in products %}
             <a href="{% url 'product_detail' product.id %}" class="listing-card-link">
                 <div class="listing-card">
-                    <p><img src="{{ product.image.url }}" width="200" height="200"/></p>
-                    {% if product.is_senior_firesale %}
-                        <p><strong>!SENIOR FIRESALE!</strong></p>
-                        <p>${{ product.price }}</p>
-                    {% endif %}
-                    {% if not product.is_senior_firesale %}
-                        <p>${{ product.price }}</p>
-                    {% endif %}
-                    <p>{{ product.name }}</p>
-                    <p>{{ product.user.profile.get_campus_display }}</p>
-                    <a href="{% url 'user_listings' product.user.id %}">{{ product.user.username }}</a>
-                    <form method="POST" action="{% url 'add_to_cart' %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="product_id" value="{{ product.id }}">
-                        <button type="submit">Add to Cart</button>
-                    </form>
-                    <form action="{% url 'product_saved' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="saved_id" value="{{ product.id }}">
-                        <button type="submit">Save</button>
-                    </form>
+                    <!-- Price -->
+                    <p class="listing-price">${{ product.price }}</p>
+        
+                    <!-- Image -->
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="listing-image"/>
+        
+                    <!-- Title and Description -->
+                    <p class="listing-title">{{ product.name }}</p>
+                    <p class="listing-location">{{ product.user.profile.get_campus_display }}</p>
+        
+                    <!-- Action Buttons -->
+                    <div class="listing-actions">
+                        <form method="POST" action="{% url 'add_to_cart' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit" class="action-button">Add to Cart</button>
+                        </form>
+                        <form method="POST" action="{% url 'product_saved' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="saved_id" value="{{ product.id }}">
+                            <button type="submit" class="action-button">Save</button>
+                        </form>
+                    </div>
                 </div>
             </a>
             {% empty %}
             <h3>Currently No Products</h3>
             {% endfor %}
-        </div>
+        </div>        
     </div>
 </div>
 </body>

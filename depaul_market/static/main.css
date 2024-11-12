@@ -148,70 +148,91 @@ button[type="submit"]:hover {
     justify-content: flex-start; /* Ensure proper alignment */
 }
 
+/* Listing Grid */
+.listing-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    padding: 10px;
+}
+
 /* Listing Cards */
 .listing-card {
-    width: 300px;
+    width: 280px; /* Adjust card width as per example */
     padding: 10px;
     background-color: #fff;
+    border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     text-align: center;
     transition: transform 0.2s ease;
-    height: 400px; /* Set a fixed height for consistency */
+    margin: 10px;
 }
 
 .listing-card:hover {
     transform: scale(1.02);
 }
 
+/* Price Tag Styling */
+.listing-price {
+    font-size: 1.2em;
+    color: #008000; /* Green color for price as in example */
+    font-weight: bold;
+    margin-right: 250px;
+    margin-top: 0;
+}
+
+/* Image Styling */
 .listing-card img {
     max-width: 100%;
     border-radius: 5px;
     margin-bottom: 10px;
-    height: 180px; /* Ensure image height is consistent */
+    height: 180px; /* Fixed height for consistency */
+    object-fit: cover;
 }
 
-.listing-card p {
-    margin: 5px 0;
-}
-
-/* Styling for Listing Text */
-.listing-card p strong {
+/* Title Styling */
+.listing-title {
+    font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: bold;
-    color: #2c3e50;
+    font-size: 1.1em;
+    color: #2980b9; /* Link color similar to example */
+    margin-right: 250px;
 }
 
-.listing-card p:first-of-type {
-    font-weight: bold;
-    font-size: 16px;
-    color: #2980b9;
+/* Location Styling */
+.listing-location {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 600;
+    font-size: 1.1em;
+    color: #2980b9; /* Link color similar to example */
+    margin-bottom: 15px;
 }
 
-/* Add to Cart Button */
-.listing-card button {
-    background-color: #007bff;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+/* Button Styling for Actions */
+.listing-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
     margin-top: 10px;
 }
 
-.listing-card button:hover {
+.action-button {
+    background-color: #007bff;
+    color: white;
+    padding: 6px 10px;
+    font-size: 0.9em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.action-button:hover {
     background-color: #0056b3;
 }
 
-/* Links for Location and Username */
-.listing-card a {
-    color: #2980b9;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.listing-card a:hover {
-    text-decoration: underline;
-}
 
 /* Auth Container (Login/Signup) */
 
