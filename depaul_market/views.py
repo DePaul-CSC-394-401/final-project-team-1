@@ -510,18 +510,20 @@ def send_purchase_confirmation(seller_email, listing_title, buyer_name):
 
 def editreview(request,review_id):
     review = get_object_or_404(UserReviews,id=review_id)
+    user_id = review.user2.id
     if request.method == 'POST':
         form = ReviewForm(request.POST, instance=review)
         if form.is_valid():
             form.save()
-            return redirect('explore')
+            return redirect('user_listings', user_id = user_id)
     else:
         form = ReviewForm(instance=review)
     return render(request,'edit_review.html',{'form':form})
 
 def deletereview(reqest,review_id):
     review = get_object_or_404(UserReviews,id=review_id)
+    user_id = review.user2.id
     if reqest.method == 'POST':
         review.delete()
-        return redirect('explore')
+        return redirect('user_listings', user_id = user_id)
     return render(reqest,"user_listings.html")

@@ -43,6 +43,7 @@
     {% if reviews %}
         <ul>
             {% for review in reviews %}
+                <div class='uploadreviews'>
                 <li>{{ review.user.username }} posted: {{ review.leavereview }}</li>
                 {% if review.user == request.user %}
                 <form method="post" action="{% url 'deletereview' review_id=review.id %}">
@@ -55,6 +56,7 @@
                 </form>
                 
                 {% endif %}
+            </div>
             {% endfor %}
         </ul>
     {% else %}
