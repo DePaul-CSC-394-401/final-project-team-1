@@ -15,6 +15,44 @@ body {
     padding-bottom: 10px;
 }
 
+.form-container {
+    max-width: 800px; /* Adjust width as necessary */
+    margin: 0 auto; /* Center the form on the page */
+    padding: 20px; /* Add padding around the form */
+    background-color: #f9f9f9; /* Optional: background color for form container */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for depth */
+    border-radius: 8px; /* Optional: rounded corners */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Space between form fields */
+}
+
+h1 {
+    text-align: center; /* Center the heading */
+    color: #1E4D9B; /* DePaul blue color */
+}
+
+/* Make the form group inline for specific fields */
+.inline-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between label and input */
+}
+
+.inline-group label {
+    flex: 0 0 auto; /* Keep the label width natural */
+    margin-bottom: 0; /* Remove extra bottom margin */
+}
+
+.inline-group input[type="file"] {
+    flex: 1; /* Allow input to take available space */
+    padding: 8px; /* Adjust padding as needed */
+    border: 1px solid #CCCCCC;
+    border-radius: 8px;
+    background-color: #F0F0F0;
+}
+
 
 /* Header Container */
 .header-container {
@@ -293,7 +331,6 @@ button[type="submit"]:hover {
 
 /* Form Group - Input Labels and Fields */
 .form-group label {
-    display:inline-block;
     padding-top: 10px;
     margin-bottom: 8px;
     color: #000000; /* Change label color to white */
