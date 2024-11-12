@@ -13,6 +13,14 @@
 <form method = 'POST'>
     {% csrf_token %}
     {{form.as_p}}
+    <label>CardNumber</label>
+    <input type='value' required placeholder='Enter CardNumber'>
+</br>
+    <label>Expire Date</label>
+    <input type='date' required>
+    <label>CVC</label>
+    <input type='value' required placeholder='CVC'>
+    
     <button type='submit'>Add Money</button>
 </form>
 

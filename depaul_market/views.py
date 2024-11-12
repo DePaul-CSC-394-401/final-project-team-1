@@ -353,20 +353,17 @@ def user_listings(request, user_id):
     listings = Products.objects.filter(user=user)
     reviews = UserReviews.objects.filter(user2 = user)
     form = ReviewForm()
-    seller = get_object_or_404(User, id = user_id)
-    reviews = UserReviews.objects.filter(user2 = seller)
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
             review.user = request.user
-            review.user2 = seller
+            review.user2 = user
             review.save()
-            
         else:
             form = ReviewForm()
         
-    return render(request, 'user_listings.html', {'user': user, 'listings': listings, 'reviews' : reviews, 'form':form, 'seller':seller})
+    return render(request, 'user_listings.html', {'user': user, 'listings': listings, 'reviews' : reviews, 'form':form})
 
 
 
@@ -509,3 +506,22 @@ def send_purchase_confirmation(seller_email, listing_title, buyer_name):
         )
     except BadHeaderError:
         print("Invalid header found.")
+
+
+def editreview(request,review_id):
+    review = get_object_or_404(UserReviews,id=review_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            return redirect('explore')
+    else:
+        form = ReviewForm(instance=review)
+    return render(request,'edit_review.html',{'form':form})
+
+def deletereview(reqest,review_id):
+    review = get_object_or_404(UserReviews,id=review_id)
+    if reqest.method == 'POST':
+        review.delete()
+        return redirect('explore')
+    return render(reqest,"user_listings.html")
