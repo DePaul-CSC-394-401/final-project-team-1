@@ -7,6 +7,15 @@ body {
     padding: 0;
 }
 
+/* class swap and firesale button */
+.button-row {
+    display: flex;
+    gap: 10px; 
+    margin-top: 10px;
+    padding-bottom: 10px;
+}
+
+
 /* Header Container */
 .header-container {
     display: flex;
@@ -17,35 +26,23 @@ body {
     border-radius: 8px;
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-top: 4px solid #CC0000; /* DePaul Red border for contrast */
-}
-
-.header-container {
-    display: flex;
-    justify-content: flex-start; /* Align to the left */
-    align-items: center;
-    padding: 12px 20px;
-    background-color: #1E4D9B; /* DePaul Blue */
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-top: 4px solid #CC0000; /* Red top border */
 }
 
-.header-container {
+/* Left navigation links */
+.nav-links {
     display: flex;
-    justify-content: flex-start; /* Align to the left */
-    align-items: center;
-    padding: 10px;
-    background-color: #1E4D9B; /* DePaul Blue */
-    border-radius: 0px; /* Remove rounded corners */
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-top: 4px solid #CC0000; /* Red top border */
 }
 
-/* Navigation Links */
-.nav-links a {
+/* Right-aligned navigation links */
+.nav-links-right {
+    display: flex;
+    margin-left: auto;
+}
+
+/* Styling for all navigation links */
+.nav-links a,
+.nav-links-right a {
     margin-right: 15px;
     text-decoration: none;
     color: #FFFFFF;
@@ -56,10 +53,12 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links-right a:hover {
     background-color: #CC0000; /* DePaul Red */
     color: white;
 }
+
 
 /* Sidebar Container */
 .sidebar-container {
@@ -68,7 +67,7 @@ body {
 
 /* Sidebar Styling */
 .sidebar {
-    width: 25%;
+    width: 15%;
     padding: 15px;
     background-color: #003f87; /* DePaul Blue background */
     color: white; /* White text for better contrast */
@@ -149,70 +148,91 @@ button[type="submit"]:hover {
     justify-content: flex-start; /* Ensure proper alignment */
 }
 
+/* Listing Grid */
+.listing-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    padding: 10px;
+}
+
 /* Listing Cards */
 .listing-card {
-    width: 300px;
+    width: 280px; /* Adjust card width as per example */
     padding: 10px;
     background-color: #fff;
+    border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     text-align: center;
     transition: transform 0.2s ease;
-    height: 400px; /* Set a fixed height for consistency */
+    margin: 10px;
 }
 
 .listing-card:hover {
     transform: scale(1.02);
 }
 
+/* Price Tag Styling */
+.listing-price {
+    font-size: 1.2em;
+    color: #008000; /* Green color for price as in example */
+    font-weight: bold;
+    margin-right: 250px;
+    margin-top: 0;
+}
+
+/* Image Styling */
 .listing-card img {
     max-width: 100%;
     border-radius: 5px;
     margin-bottom: 10px;
-    height: 180px; /* Ensure image height is consistent */
+    height: 180px; /* Fixed height for consistency */
+    object-fit: cover;
 }
 
-.listing-card p {
-    margin: 5px 0;
-}
-
-/* Styling for Listing Text */
-.listing-card p strong {
+/* Title Styling */
+.listing-title {
+    font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: bold;
-    color: #2c3e50;
+    font-size: 1.1em;
+    color: #2980b9; /* Link color similar to example */
+    margin-right: 250px;
 }
 
-.listing-card p:first-of-type {
-    font-weight: bold;
-    font-size: 16px;
-    color: #2980b9;
+/* Location Styling */
+.listing-location {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 600;
+    font-size: 1.1em;
+    color: #2980b9; /* Link color similar to example */
+    margin-bottom: 15px;
 }
 
-/* Add to Cart Button */
-.listing-card button {
-    background-color: #007bff;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+/* Button Styling for Actions */
+.listing-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
     margin-top: 10px;
 }
 
-.listing-card button:hover {
+.action-button {
+    background-color: #007bff;
+    color: white;
+    padding: 6px 10px;
+    font-size: 0.9em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.action-button:hover {
     background-color: #0056b3;
 }
 
-/* Links for Location and Username */
-.listing-card a {
-    color: #2980b9;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.listing-card a:hover {
-    text-decoration: underline;
-}
 
 /* Auth Container (Login/Signup) */
 
@@ -230,6 +250,7 @@ button[type="submit"]:hover {
     color: white;
     width: 400px;
     padding: 30px;
+    padding-right: 50px;
     border-radius: 15px;
     margin: 100px auto 100px auto; /* Add more top margin for logo space */
     text-align: center;
@@ -557,6 +578,19 @@ footer p {
 }
 
 /* Search Bar Styling */
+
+.search-bar-listing {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    margin-bottom: 50px;
+    max-width: 600px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 25px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 .search-bar {
     display: flex;
     justify-content: center;
