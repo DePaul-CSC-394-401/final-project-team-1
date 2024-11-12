@@ -5,21 +5,30 @@
     <div class="header-container">
         <div class="nav-links">
             <a href="{% url 'add_listing' %}"> Add a listing  </a> 
-            <a href="{% url 'profile_settings' %}">Profile </a>
             <a href="{% url 'hold_products' %}"> Hold Products  </a>
             <a href="{% url 'cart' %}">Cart</a>
             <a href="{% url 'wallet' %}">Wallet</a>
-            <a href="{% url 'about' %}">About</a>
-            <a href="{% url 'logout' %}"> Logout </a> 
+            <a href="{% url 'about' %}">About</a> 
+        </div>
+        <div class="nav-links-right">
+            <a href="{% url 'profile_settings' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
         </div>
     </div>
     
 
     <div class="sidebar-container">
         <div class="sidebar">
-            <form method="GET" action="{% url 'listings' %}">
-                <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
-                <button type="submit">Search</button>
+
+            <div class="button-row">
+                <div class="class-swap">
+                    <button type="submit", name="class_swap" value="true">Class Swap</button>
+                </div>
+        
+                <div class="senior-firesale">
+                    <button type="submit" name="senior_firesale" value="true">Senior Firesale</button>
+                </div>
+            </div>
 
     <!-- Location Filter -->
     <div class="filter-section">
@@ -49,53 +58,37 @@
         <a href="?condition=used">Used</a>
         <a href="?condition=refurbished">Refurbished</a>
     </div>
-            
-    <div class="class-swap">
-        <button type="submit", name="class_swap" value="true">Class Swap</button>
-    </div>
-
-    <div class="senior-firesale">
-        <button type="submit" name="senior_firesale" value="true">Senior Firesale</button>
-    </div>
             </form>
     </div>
 
+    <div class="content-container">
+        <form method="GET" action="{% url 'listings' %}" class="search-bar">
+            <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+            <button type="submit">&#x1F50D;</button>
+        </form>
 
+        <!-- Listings Grid -->
         <div class="listing-grid">
             {% for product in products %}
-            <!-- Listing cards will be displayed here -->
             <a href="{% url 'product_detail' product.id %}" class="listing-card-link">
                 <div class="listing-card">
                     <p><img src="{{ product.image.url }}" width="200" height="200"/></p>
                     {% if product.is_senior_firesale %}
                         <p><strong>!SENIOR FIRESALE!</strong></p>
-                        <p>${{product.price}}</p>
+                        <p>${{ product.price }}</p>
                     {% endif %}
-
                     {% if not product.is_senior_firesale %}
-                        <p> ${{product.price}}</p>
+                        <p>${{ product.price }}</p>
                     {% endif %}
-
-                    <p> {{ product.name }}</p>
-                    <p> {{product.user.profile.get_campus_display}}</p>
-                    
-                    <!-- Display product availability if set -->
-                    {% if product.available_until %} 
-                        <p><strong>Available Until: {{ product.available_until }}</strong></p>
-                    {% endif %}
-                    
-                    <!-- Link to the user's profile with all their listings -->
-                    <a href="{% url 'user_listings' product.user.id %}" > {{ product.user.username }} </a>
-                    
-                    <!-- Add to Cart Button -->
+                    <p>{{ product.name }}</p>
+                    <p>{{ product.user.profile.get_campus_display }}</p>
+                    <a href="{% url 'user_listings' product.user.id %}">{{ product.user.username }}</a>
                     <form method="POST" action="{% url 'add_to_cart' %}">
                         {% csrf_token %}
                         <input type="hidden" name="product_id" value="{{ product.id }}">
                         <button type="submit">Add to Cart</button>
                     </form>
-
-                   <!-- Archive Button -->
-                   <form action="{% url 'product_saved' %}" method="POST">
+                    <form action="{% url 'product_saved' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="saved_id" value="{{ product.id }}">
                         <button type="submit">Save</button>
@@ -107,5 +100,6 @@
             {% endfor %}
         </div>
     </div>
+</div>
 </body>
 {% endblock %}
